@@ -35,12 +35,12 @@ func ValidateToken(tokenStr string) (*Claims, error) {
 	})
 
 	if err != nil {
-		return nil, errors.New("неверный токен")
+		return nil, errors.New("Invalid token")
 	}
 
 	claims, ok := token.Claims.(*Claims)
 	if !ok || !token.Valid {
-		return nil, errors.New("неверный токен")
+		return nil, errors.New("Invalid token")
 	}
 
 	return claims, nil

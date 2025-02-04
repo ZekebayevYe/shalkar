@@ -21,7 +21,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		Role     string `json:"role"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Некорректные данные"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid data"})
 		return
 	}
 
@@ -31,7 +31,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Пользователь создан"})
+	c.JSON(http.StatusOK, gin.H{"message": "User created"})
 }
 
 func (h *AuthHandler) Login(c *gin.Context) {
@@ -40,7 +40,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		Password string `json:"password"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Некорректные данные"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid data"})
 		return
 	}
 

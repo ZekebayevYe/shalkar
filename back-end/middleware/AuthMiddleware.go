@@ -13,21 +13,21 @@ func AuthMiddleware() gin.HandlerFunc {
 		authHeader := c.GetHeader("Authorization")
 
 		if authHeader == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Токен отсутствует"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "authorization not found"})
 			c.Abort()
 			return
 		}
 
 		parts := strings.Split(authHeader, " ")
 		if len(parts) != 2 || parts[0] != "Bearer" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Неверный формат токена"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid format token"})
 			c.Abort()
 			return
 		}
 
 		claims, err := utils.ValidateToken(parts[1])
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Неверный токен"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid token"})
 			c.Abort()
 			return
 		}
@@ -43,7 +43,7 @@ func AdminMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		role, exists := c.Get("role")
 		if !exists || role != "admin" {
-			c.JSON(http.StatusForbidden, gin.H{"error": "Доступ запрещен: требуется роль admin"})
+			c.JSON(http.StatusForbidden, gin.H{"error": "role must be admin"})
 			c.Abort()
 			return
 		}

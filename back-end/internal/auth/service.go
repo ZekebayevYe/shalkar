@@ -15,7 +15,7 @@ func NewAuthService(repo *AuthRepository) *AuthService {
 
 func (s *AuthService) Register(username, password, role string) error {
 	if role != "admin" && role != "user" {
-		return errors.New("неверная роль")
+		return errors.New("invalid role")
 	}
 
 	hashedPassword, err := utils.HashPassword(password)
@@ -38,11 +38,11 @@ func (s *AuthService) Login(username, password string) (string, error) {
 		return "", err
 	}
 	if user == nil {
-		return "", errors.New("пользователь не найден")
+		return "", errors.New("user not found")
 	}
 
 	if !utils.CheckPassword(password, user.Password) {
-		return "", errors.New("неверный пароль")
+		return "", errors.New("invalid password")
 	}
 
 	token, err := utils.GenerateToken(user.ID, user.Role)

@@ -25,30 +25,30 @@ func NewFileService(repo FileRepository) FileService {
 
 func (s *fileService) UploadFile(fileHeader *multipart.FileHeader, username string, role string) (*File, error) {
     if role != "admin" {
-        return nil, errors.New("доступ запрещен: только админы могут загружать файлы")
+        return nil, errors.New("Only amdin can upload files")
     }
 
     uploadPath := "uploads/"
     if err := os.MkdirAll(uploadPath, os.ModePerm); err != nil {
-        return nil, fmt.Errorf("не удалось создать папку для загрузки: %v", err)
+        return nil, fmt.Errorf("Error in creating file to upload: %v", err)
     }
 
     filePath := fmt.Sprintf("%s%s", uploadPath, fileHeader.Filename)
 
     src, err := fileHeader.Open()
     if err != nil {
-        return nil, fmt.Errorf("ошибка открытия файла: %v", err)
+        return nil, fmt.Errorf("Error in opening file: %v", err)
     }
     defer src.Close()
 
     dst, err := os.Create(filePath)
     if err != nil {
-        return nil, fmt.Errorf("ошибка создания файла: %v", err)
+        return nil, fmt.Errorf("Error creating file: %v", err)
     }
     defer dst.Close()
 
     if _, err := io.Copy(dst, src); err != nil {
-        return nil, fmt.Errorf("ошибка сохранения файла: %v", err)
+        return nil, fmt.Errorf("Error in saving file: %v", err)
     }
 
     file := &File{
@@ -59,7 +59,7 @@ func (s *fileService) UploadFile(fileHeader *multipart.FileHeader, username stri
     }
 
     if err := s.repo.Save(file); err != nil {
-        return nil, fmt.Errorf("ошибка сохранения информации о файле в БД: %v", err)
+        return nil, fmt.Errorf("Error in saving data in DB: %v", err)
     }
 
     return file, nil
