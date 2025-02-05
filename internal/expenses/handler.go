@@ -9,14 +9,14 @@ import (
 func CalculateHandler(repo *Repository) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
-			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+			http.Error(w, "not allowed", http.StatusMethodNotAllowed)
 			return
 		}
 
 		var input ExpenseInput
 		err := json.NewDecoder(r.Body).Decode(&input)
 		if err != nil {
-			http.Error(w, "Invalid input", http.StatusBadRequest)
+			http.Error(w, "invalid", http.StatusBadRequest)
 			return
 		}
 
