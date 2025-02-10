@@ -1,25 +1,31 @@
 package feedback
 
-type Service struct {
-	Repo *FeedbackRepository
+import (
+	"fmt"
+	"time"
+)
+
+type ChatService struct {
+	Repo *ChatRepository
 }
 
-func (s *Service) SubmitFeedbackService(feedback Feedback) error {
-	return s.Repo.SubmitFeedback(feedback)
+func NewChatService(repo *ChatRepository) *ChatService {
+	return &ChatService{Repo: repo}
 }
 
-func (s *Service) GetAllFeedbackService() ([]Feedback, error) {
-	return s.Repo.GetAllFeedback()
+func (s *ChatService) SendMessage(chat ChatMessage) error {
+	chat.Timestamp = time.Now()
+	err := s.Repo.SendMessage(chat)
+	if err != nil {
+		return fmt.Errorf("failed to send message: %v", err)
+	}
+	return nil
 }
 
-func (s *Service) UpdateFeedbackStatusService(id int, status string) error {
-	return s.Repo.UpdateFeedbackStatus(id, status)
-}
-
-func (s *Service) AddCommentService(comment FeedbackComment) error {
-	return s.Repo.AddComment(comment)
-}
-
-func (s *Service) GetCommentsService(feedbackID int) ([]FeedbackComment, error) {
-	return s.Repo.GetComments(feedbackID)
+func (s *ChatService) GetChatHistory(chatRoom string) ([]ChatMessage, error) {
+	messages, err := s.Repo.GetChatHistory(chatRoom)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch chat history: %v", err)
+	}
+	return messages, nil
 }

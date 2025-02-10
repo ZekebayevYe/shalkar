@@ -1,21 +1,15 @@
 package feedback
 
-import "time"
+import (
+	"time"
+)
 
-type Feedback struct {
-	ID          int       `json:"id"`
-	UserID      int       `json:"user_id"`
-	Category    string    `json:"category"`
-	Message     string    `json:"message"`
-	Status      string    `json:"status"`
-	IsAnonymous bool      `json:"is_anonymous"`
-	CreatedAt   time.Time `json:"created_at"`
-}
-
-type FeedbackComment struct {
+type ChatMessage struct {
 	ID         int       `json:"id"`
-	FeedbackID int       `json:"feedback_id"`
-	UserID     int       `json:"user_id"`
-	Comment    string    `json:"comment"`
-	CreatedAt  time.Time `json:"created_at"`
+	SenderID   int       `json:"sender_id"`
+	ReceiverID int       `json:"receiver_id"`
+	IsAdmin    bool      `json:"is_admin"`
+	Message    string    `json:"message"`
+	Timestamp  time.Time `json:"timestamp"`
+	ChatRoom   string    `json:"chat_room"`
 }
