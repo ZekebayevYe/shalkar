@@ -8,7 +8,9 @@ type FileRepository interface {
     Save(file *File) error
     GetByID(id uint) (*File, error)
     GetAll() ([]File, error)
+    DeleteFile(id uint) error // Новый метод
 }
+
 
 type fileRepo struct {
     db *gorm.DB
@@ -20,6 +22,14 @@ func NewFileRepository(db *gorm.DB) FileRepository {
 
 func (r *fileRepo) Save(file *File) error {
     return r.db.Create(file).Error
+}
+
+func (r *fileRepo) DeleteFile(id uint) error {
+    result := r.db.Delete(&File{}, id)
+    if result.Error != nil {
+        return result.Error
+    }
+    return nil
 }
 
 func (r *fileRepo) GetByID(id uint) (*File, error) {

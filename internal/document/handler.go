@@ -53,6 +53,23 @@ func (h *FileHandler) UploadFile(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{"message": "file successful", "file": uploadedFile})
 }
 
+func (h *FileHandler) DeleteFile(c *gin.Context) {
+    id, err := strconv.Atoi(c.Param("id"))
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "incorrect id"})
+        return
+    }
+
+    err = h.service.DeleteFile(uint(id))
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Error deleting file: " + err.Error()})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{"message": "File deleted successfully"})
+}
+
+
 func (h *FileHandler) DownloadFile(c *gin.Context) {
     id, err := strconv.Atoi(c.Param("id"))
     if err != nil {

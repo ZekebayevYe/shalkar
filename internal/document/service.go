@@ -13,6 +13,7 @@ type FileService interface {
     UploadFile(fileHeader *multipart.FileHeader, username string, role string) (*File, error)
     GetFile(id uint) (*File, error)
     ListFiles() ([]File, error)
+    DeleteFile(id uint) error
 }
 
 type fileService struct {
@@ -67,6 +68,26 @@ func (s *fileService) UploadFile(fileHeader *multipart.FileHeader, username stri
 
 func (s *fileService) GetFile(id uint) (*File, error) {
     return s.repo.GetByID(id)
+}
+
+func (s *fileService) DeleteFile(id uint) error {
+    // Получаем информацию о файле из БД
+    file, err := s.repo.GetByID(id) // Исправлено: заменил GetFile на GetByID
+    if err != nil {
+        return fmt.Errorf("file not found: %v", err)
+    }
+
+    // Удаляем файл из файловой системы
+    if err := os.Remove(file.Path); err != nil {
+        return fmt.Errorf("error deleting file from storage: %v", err)
+    }
+
+    // Удаляем запись о файле из базы данных
+    if err := s.repo.DeleteFile(id); err != nil {
+        return fmt.Errorf("error deleting file from database: %v", err)
+    }
+
+    return nil
 }
 
 func (s *fileService) ListFiles() ([]File, error) {
