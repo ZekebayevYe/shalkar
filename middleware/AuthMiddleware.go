@@ -2,19 +2,23 @@ package middleware
 
 import (
 	"UMS/utils"
+	"log"
 	"net/http"
 	"strings"
 
-	"github.com/gin-gonic/gin"
-	"github.com/gin-contrib/cors"
 	"time"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
+		log.Println("📌 Authorization Header:", authHeader) // Проверяем, что токен передаётся
 
 		if authHeader == "" {
+			log.Println("❌ Ошибка: Токен отсутствует")
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "authorization not found"})
 			c.Abort()
 			return
@@ -22,6 +26,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		parts := strings.Split(authHeader, " ")
 		if len(parts) != 2 || parts[0] != "Bearer" {
+			log.Println("❌ Ошибка: Неверный формат токена")
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid format token"})
 			c.Abort()
 			return
@@ -29,11 +34,13 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		claims, err := utils.ValidateToken(parts[1])
 		if err != nil {
+			log.Println("❌ Ошибка: Токен недействителен -", err)
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid token"})
 			c.Abort()
 			return
 		}
 
+		log.Println("✅ Успешная аутентификация: user_id =", claims.UserID, "role =", claims.Role)
 		c.Set("user_id", claims.UserID)
 		c.Set("role", claims.Role)
 
@@ -62,4 +69,3 @@ func CORSMiddleware() gin.HandlerFunc {
 		MaxAge:           12 * time.Hour,
 	})
 }
-

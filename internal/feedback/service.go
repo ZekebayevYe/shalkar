@@ -1,31 +1,35 @@
 package feedback
 
 import (
-	"fmt"
 	"time"
 )
 
-type ChatService struct {
-	Repo *ChatRepository
+type ChatService interface {
+	SendMessage(senderID, receiverID int, isAdmin bool, chatRoom, message string) error
+	GetChatHistory(chatRoom string) ([]ChatMessage, error)
 }
 
-func NewChatService(repo *ChatRepository) *ChatService {
-	return &ChatService{Repo: repo}
+type chatService struct {
+	repo ChatRepository
 }
 
-func (s *ChatService) SendMessage(chat ChatMessage) error {
-	chat.Timestamp = time.Now()
-	err := s.Repo.SendMessage(chat)
-	if err != nil {
-		return fmt.Errorf("failed to send message: %v", err)
+func NewChatService(repo ChatRepository) ChatService {
+	return &chatService{repo: repo}
+}
+
+func (s *chatService) SendMessage(senderID, receiverID int, isAdmin bool, chatRoom, message string) error {
+	chat := ChatMessage{
+		SenderID:   senderID,
+		ReceiverID: receiverID,
+		IsAdmin:    isAdmin,
+		ChatRoom:   chatRoom,
+		Message:    message,
+		Timestamp:  time.Now(),
 	}
-	return nil
+
+	return s.repo.SendMessage(&chat)
 }
 
-func (s *ChatService) GetChatHistory(chatRoom string) ([]ChatMessage, error) {
-	messages, err := s.Repo.GetChatHistory(chatRoom)
-	if err != nil {
-		return nil, fmt.Errorf("failed to fetch chat history: %v", err)
-	}
-	return messages, nil
+func (s *chatService) GetChatHistory(chatRoom string) ([]ChatMessage, error) {
+	return s.repo.GetChatHistory(chatRoom)
 }

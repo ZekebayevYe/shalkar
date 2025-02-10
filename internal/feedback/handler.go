@@ -1,57 +1,63 @@
 package feedback
 
 import (
-	"encoding/json"
 	"net/http"
+	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 type ChatHandler struct {
-	Service *ChatService
+	service ChatService
 }
 
-func NewChatHandler(service *ChatService) *ChatHandler {
-	return &ChatHandler{Service: service}
+func NewChatHandler(service ChatService) *ChatHandler {
+	return &ChatHandler{service: service}
 }
 
-func (h *ChatHandler) SendMessageHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+func (h *ChatHandler) SendMessageHandler(c *gin.Context) {
+	var input struct {
+		ReceiverID int    `json:"receiver_id"`
+		Message    string `json:"message"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
 		return
 	}
 
-	var chat ChatMessage
-	if err := json.NewDecoder(r.Body).Decode(&chat); err != nil {
-		http.Error(w, "Invalid JSON input", http.StatusBadRequest)
-		return
-	}
+	senderID := c.GetInt("user_id")
+	isAdmin := c.GetString("role") == "admin"
+	chatRoom := generateChatRoomID(senderID, input.ReceiverID, isAdmin)
 
-	if err := h.Service.SendMessage(chat); err != nil {
-		http.Error(w, "Failed to send message", http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]string{"message": "Message sent successfully"})
-}
-
-func (h *ChatHandler) GetChatHistoryHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	chatRoom := r.URL.Query().Get("chat_room")
-	if chatRoom == "" {
-		http.Error(w, "Missing chat_room parameter", http.StatusBadRequest)
-		return
-	}
-
-	messages, err := h.Service.GetChatHistory(chatRoom)
+	err := h.service.SendMessage(senderID, input.ReceiverID, isAdmin, chatRoom, input.Message)
 	if err != nil {
-		http.Error(w, "Failed to fetch chat history", http.StatusInternalServerError)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to send message"})
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(messages)
+	c.JSON(http.StatusOK, gin.H{"message": "Message sent"})
+}
+
+func (h *ChatHandler) GetChatHistoryHandler(c *gin.Context) {
+	chatRoom := c.Query("chat_room")
+	if chatRoom == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing chat_room parameter"})
+		return
+	}
+
+	messages, err := h.service.GetChatHistory(chatRoom)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch chat history"})
+		return
+	}
+
+	c.JSON(http.StatusOK, messages)
+}
+
+func generateChatRoomID(userID, receiverID int, isAdmin bool) string {
+	if isAdmin {
+		return "admin-" + strconv.Itoa(receiverID)
+	}
+	return "admin-" + strconv.Itoa(userID)
 }

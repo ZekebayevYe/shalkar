@@ -4,6 +4,8 @@ import (
 	"UMS/config"
 	"UMS/internal/auth"
 	"UMS/internal/document"
+	"UMS/internal/expenses"
+	"UMS/internal/feedback"
 	"UMS/middleware"
 	"log"
 	"os"
@@ -14,9 +16,11 @@ import (
 )
 
 func main() {
-	// Логирование процесса подключения к БД
+	// 🔄 Подключение к базе данных
 	log.Println("🔄 Подключение к базе данных...")
 	config.ConnectDB()
+
+	// Получаем подключение к БД
 	db := config.DB
 
 	// Инициализация сервисов
@@ -28,12 +32,21 @@ func main() {
 	fileService := document.NewFileService(fileRepo)
 	fileHandler := document.NewFileHandler(fileService)
 
+	// Инициализация модулей
+	expRepo := expenses.NewExpenseRepository(db)
+	expService := expenses.NewExpenseService(expRepo)
+	expHandler := expenses.NewExpenseHandler(expService)
+
+	chatRepo := feedback.NewChatRepository(db)
+	chatService := feedback.NewChatService(chatRepo)
+	chatHandler := feedback.NewChatHandler(chatService)
+
 	// Создание маршрутизатора
 	r := gin.Default()
 
-	// 🔥 CORS Middleware (разрешаем все домены, если нужно только фронту - укажи его)
+	// 🔥 CORS Middleware
 	r.Use(cors.New(cors.Config{
-		AllowAllOrigins:  true, // Разрешаем запросы с любых доменов
+		AllowAllOrigins:  true,
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -41,8 +54,8 @@ func main() {
 		MaxAge:           12 * time.Hour,
 	}))
 
-	r.Use(gin.Logger())   // Логирование запросов
-	r.Use(gin.Recovery()) // Восстановление после ошибок
+	r.Use(gin.Logger())
+	r.Use(gin.Recovery())
 
 	// 🔑 Роуты авторизации
 	authRoutes := r.Group("/auth")
@@ -55,12 +68,18 @@ func main() {
 	protectedRoutes := r.Group("/api")
 	protectedRoutes.Use(middleware.AuthMiddleware())
 	{
-		// ✅ Доступ для всех пользователей
 		protectedRoutes.GET("/profile", func(c *gin.Context) {
 			c.JSON(200, gin.H{"message": "Доступ разрешен!"})
 		})
 		protectedRoutes.GET("/files", fileHandler.ListFiles)
 		protectedRoutes.GET("/download/:id", fileHandler.DownloadFile)
+
+		// 🔐 Маршруты коммунальных расходов
+		protectedRoutes.POST("/expenses/calculate", expHandler.CalculateExpense)
+
+		// 🔐 Маршруты чата
+		protectedRoutes.POST("/chat/send", chatHandler.SendMessageHandler)
+		protectedRoutes.GET("/chat/history", chatHandler.GetChatHistoryHandler)
 
 		// 🔐 Админские маршруты
 		adminRoutes := protectedRoutes.Group("/")

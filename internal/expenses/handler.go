@@ -1,44 +1,43 @@
 package expenses
 
 import (
-	"encoding/json"
+	"log"
 	"net/http"
-	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
-func CalculateHandler(repo *Repository) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodPost {
-			http.Error(w, "not allowed", http.StatusMethodNotAllowed)
-			return
-		}
+type ExpenseHandler struct {
+	service ExpenseService
+}
 
-		var input ExpenseInput
-		err := json.NewDecoder(r.Body).Decode(&input)
-		if err != nil {
-			http.Error(w, "invalid", http.StatusBadRequest)
-			return
-		}
+func NewExpenseHandler(service ExpenseService) *ExpenseHandler {
+	return &ExpenseHandler{service: service}
+}
 
-		// получаем юзер айди
-		userIDStr := r.URL.Query().Get("user_id")
-		userID, err := strconv.Atoi(userIDStr)
-		if err != nil {
-			http.Error(w, "Invalid user ID", http.StatusBadRequest)
-			return
-		}
-
-		// считаем сумму
-		result := CalculateExpenses(input)
-
-		// результат в базу данных кидаем
-		if saveErr := repo.SaveTotalCost(userID, result.TotalCost); saveErr != nil {
-			http.Error(w, "Failed to save total cost", http.StatusInternalServerError)
-			return
-		}
-
-		// юзеру резы отправляем
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(map[string]float64{"total_cost": result.TotalCost})
+func (h *ExpenseHandler) CalculateExpense(c *gin.Context) {
+	var input Expense
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		return
 	}
+
+	userID := c.GetInt("user_id") // Теперь получаем user_id как int
+	if userID == 0 {
+		log.Println("❌ Ошибка: user_id не передан или равен 0")
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user_id"})
+		return
+	}
+
+	log.Println("📌 user_id:", userID)
+	log.Println("📌 Входные данные:", input)
+
+	result, err := h.service.CalculateAndSave(userID, input)
+	if err != nil {
+		log.Println("❌ Ошибка при сохранении:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save expenses"})
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
 }

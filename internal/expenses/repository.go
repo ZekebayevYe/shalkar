@@ -1,21 +1,35 @@
 package expenses
 
 import (
-	"database/sql"
 	"log"
+
+	"gorm.io/gorm"
 )
 
-type Repository struct {
-	DB *sql.DB
+type ExpenseRepository interface {
+	Save(expense *Expense) error
+	GetByUserID(userID int) ([]Expense, error)
 }
 
-// сохраняем итоги в бд
-func (r *Repository) SaveTotalCost(userID int, totalCost float64) error {
-	query := `INSERT INTO calculations (user_id, total_cost) VALUES ($1, $2)`
-	_, err := r.DB.Exec(query, userID, totalCost)
+type expenseRepo struct {
+	db *gorm.DB
+}
+
+func NewExpenseRepository(db *gorm.DB) ExpenseRepository {
+	return &expenseRepo{db: db}
+}
+
+func (r *expenseRepo) Save(expense *Expense) error {
+	log.Println("📌 Сохранение расходов:", expense)
+	err := r.db.Create(expense).Error
 	if err != nil {
-		log.Printf("Ошибка сохранения итоговой суммы: %v", err)
-		return err
+	  log.Println("❌ Ошибка сохранения в БД:", err)
 	}
-	return nil
+	return err
+  }
+
+func (r *expenseRepo) GetByUserID(userID int) ([]Expense, error) {
+	var expenses []Expense
+	err := r.db.Where("user_id = ?", userID).Find(&expenses).Error
+	return expenses, err
 }
