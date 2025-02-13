@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оставить обращение</title>
+    <link rel="stylesheet" href="../css/issues.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <!-- Навигационная панель -->
+    <nav class="navbar">
+        <div class="logo">UMS</div>
+        <ul class="nav-links">
+            <li><a href="main.html">Home Page</a></li>
+            <li><a href="documents.html">Documents</a></li>
+            <li><a href="news.html">News and events</a></li>
+            <li><a href="issues.html">Report</a></li>
+            <li><a href="bill.html">Bill Payment</a></li>
+            <li><a href="support.html">Support</a></li>
+        </ul>
+    </nav>
+    
+    <!-- Контейнер формы -->
+    <div class="container">
+        <div class="form-box">
+            <h2>📌 Оставить обращение</h2>
+            <div class="box">
+                <form id="issue-form">
+                    <input type="text" id="title" placeholder="Введите заголовок" required>
+                    <textarea id="description" placeholder="Опишите проблему" required></textarea>
+                    <button type="submit">📨 Отправить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

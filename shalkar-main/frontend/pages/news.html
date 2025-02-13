@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новости и события</title>
+    <link rel="stylesheet" href="../css/news.css">
+    <script defer src="../js/news.js"></script>
+</head>
+<body>
+    <!-- Навигационная панель -->
+    <nav class="navbar">
+        <div class="logo">UMS</div>
+        <ul class="nav-links">
+            <li><a href="main.html">Home Page</a></li>
+            <li><a href="documents.html">Documents</a></li>
+            <li><a href="news.html">News and events</a></li>
+            <li><a href="issues.html">Report</a></li>
+            <li><a href="bill.html">Bill Payment</a></li>
+            <li><a href="support.html">Support</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <div class="box centered-box">
+            <h1>📰 News and 🎉 Events</h1>
+
+            <!-- Карусель новостей -->
+            <div class="carousel-container">
+                <button id="prev-news">◀</button>
+                <div class="carousel" id="news-carousel">
+                    <div class="news-item">
+                        <img src="" alt="Новость 1">
+                        <h3>Обновление тарифов</h3>
+                        <p>С 1 марта тарифы на воду повысятся на 7%</p>
+                    </div>
+                    <div class="news-item">
+                        <img src="" alt="Новость 2">
+                        <h3>Плановое отключение воды</h3>
+                        <p>С 10 по 15 марта будет временно отключена горячая вода</p>
+                    </div>
+                </div>
+                <button id="next-news">▶</button>
+            </div>
+
+            <!-- Карусель событий -->
+            <div class="carousel-container">
+                <button id="prev-event">◀</button>
+                <div class="carousel" id="event-carousel">
+                    <div class="event-item">
+                        <img src="../images/event-placeholder.jpg" alt="Событие 1">
+                        <h3>Общее собрание жильцов</h3>
+                        <p>5 апреля в 19:00 состоится встреча по вопросам ЖКХ</p>
+                    </div>
+                    <div class="event-item">
+                        <img src="../images/event-placeholder.jpg" alt="Событие 2">
+                        <h3>Субботник</h3>
+                        <p>Приглашаем всех на уборку двора 15 апреля</p>
+                    </div>
+                </div>
+                <button id="next-event">▶</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
