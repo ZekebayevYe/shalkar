@@ -1,0 +1,147 @@
+body {
+    font-family: Arial, sans-serif;
+    background: url('../icons/backround.jpg') no-repeat center center/cover; /* Фон-картинка */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 90%;
+    max-width: 800px;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+#admin-panel {
+    margin-bottom: 20px;
+}
+
+input[type="file"] {
+    margin-bottom: 10px;
+}
+
+.file-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    justify-content: center;
+}
+
+.file-card {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: 0.3s;
+}
+
+.file-card:hover {
+    transform: scale(1.05);
+}
+
+.file-card img {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+.file-card a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #333;
+    display: block;
+    margin-top: 5px;
+}
+
+.delete-btn {
+    background: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 5px;
+    transition: 0.3s;
+}
+
+.delete-btn:hover {
+    background: darkred;
+}
+
+.hidden {
+    display: none;
+}
+/* Общие стили для контейнера */
+.upload-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+
+
+.file-label:hover {
+    background: #007bff;
+    color: white;
+}
+
+
+
+#upload-btn:hover {
+    background: #0056b3;
+}
+
+/* Иконка внутри кнопки */
+#upload-btn img {
+    width: 20px;
+}
+
+#admin-panel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.file-label {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    display: inline-block;
+}
+
+#file-input {
+    display: none;
+}
+
+#upload-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: bold;
+}
+
+#upload-btn img {
+    width: 20px;
+    height: 20px;
+}

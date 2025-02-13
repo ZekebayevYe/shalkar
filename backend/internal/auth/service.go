@@ -13,18 +13,15 @@ func NewAuthService(repo *AuthRepository) *AuthService {
 	return &AuthService{repo: repo}
 }
 
-// ✅ РЕГИСТРАЦИЯ (Добавлена проверка на пустой пароль)
 func (s *AuthService) Register(username, password, role string) error {
 	if username == "" || password == "" {
 		return errors.New("username and password cannot be empty")
 	}
 
-	// Если роль не указана или пустая, устанавливаем "user" по умолчанию
 	if role == "" {
 		role = "user"
 	}
 
-	// Проверяем, что роль корректная
 	if role != "admin" && role != "user" {
 		return errors.New("invalid role")
 	}
@@ -43,7 +40,6 @@ func (s *AuthService) Register(username, password, role string) error {
 	return s.repo.CreateUser(user)
 }
 
-// ✅ ЛОГИН (Теперь возвращает `user` + `token`)
 func (s *AuthService) Login(username, password string) (*User, string, error) {
 	user, err := s.repo.FindByUsername(username)
 	if err != nil {
@@ -62,5 +58,5 @@ func (s *AuthService) Login(username, password string) (*User, string, error) {
 		return nil, "", err
 	}
 
-	return user, token, nil // ✅ Теперь возвращаем user + token
+	return user, token, nil 
 }

@@ -14,7 +14,6 @@ func NewAuthHandler(service *AuthService) *AuthHandler {
 	return &AuthHandler{service: service}
 }
 
-// ✅ РЕГИСТРАЦИЯ (Теперь можно задать роль)
 func (h *AuthHandler) Register(c *gin.Context) {
 	var req struct {
 		Username string `json:"username"`
@@ -35,7 +34,6 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User created"})
 }
 
-// ✅ ЛОГИН (Теперь возвращает не только `token`, но и `role`)
 func (h *AuthHandler) Login(c *gin.Context) {
 	var req struct {
 		Username string `json:"username"`
@@ -54,6 +52,6 @@ func (h *AuthHandler) Login(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"token": token,
-		"role":  user.Role, // ✅ Теперь фронт получит роль
+		"role":  user.Role, 
 	})
 }

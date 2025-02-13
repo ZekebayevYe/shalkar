@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documents</title>
+    <link rel="stylesheet" href="../css/documents.css">
+</head>
+<body>
+    <div class="container">
+        <h1>📂 Documents</h1>
+
+        <div id="admin-panel" class="hidden">
+            <label for="file-input" class="file-label">Choose File</label>
+            <input type="file" id="file-input">
+            <button id="upload-btn">
+                <img src="../icons/upload.png" alt="Upload" width="20">
+                Upload
+            </button>
+        </div>
+
+        <div id="file-list" class="file-grid"></div>
+    </div>
+
+    <script src="../js/documents.js"></script>
+</body>
+</html>

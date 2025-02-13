@@ -1,0 +1,20 @@
+{
+    "openapi": "3.0.0",
+    "info": { "title": "UMS API", "version": "1.0.0" },
+    "paths": {
+      "/auth/register": { "post": "User registration" },
+      "/auth/login": { "post": "User login" },
+      "/api/profile": { "get": "Get user profile (Auth required)" },
+      "/api/files": { "get": "List files (Auth required)" },
+      "/api/download/{id}": { "get": "Download file (Auth required)" },
+      "/api/expenses/calculate": { "post": "Calculate expenses (Auth required)" },
+      "/api/chat/send": { "post": "Send chat message (Auth required)" },
+      "/api/chat/history": { "get": "Get chat history (Auth required)" },
+      "/api/upload": { "post": "Upload file (Admin only)" },
+      "/api/files/{id}": { "delete": "Delete file (Admin only)" }
+    },
+    "components": {
+    "securitySchemes": { "bearerAuth": { "type": "http", "scheme": "bearer" } }
+    }
+  }
+  

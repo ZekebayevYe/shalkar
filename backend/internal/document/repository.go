@@ -8,7 +8,7 @@ type FileRepository interface {
     Save(file *File) error
     GetByID(id uint) (*File, error)
     GetAll() ([]File, error)
-    DeleteFile(id uint) error // Новый метод
+    DeleteFile(id uint) error 
 }
 
 

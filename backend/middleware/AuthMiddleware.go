@@ -15,7 +15,7 @@ import (
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
-		log.Println("📌 Authorization Header:", authHeader) // Проверяем, что токен передаётся
+		log.Println("📌 Authorization Header:", authHeader) 
 
 		if authHeader == "" {
 			log.Println("❌ Ошибка: Токен отсутствует")
@@ -62,7 +62,7 @@ func AdminMiddleware() gin.HandlerFunc {
 
 func CORSMiddleware() gin.HandlerFunc {
 	return cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"}, // Разрешаем фронту
+		AllowOrigins:     []string{"http://localhost:5173"}, 
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		AllowCredentials: true,

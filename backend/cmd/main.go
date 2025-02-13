@@ -16,14 +16,11 @@ import (
 )
 
 func main() {
-	// 🔄 Подключение к базе данных
 	log.Println("🔄 Подключение к базе данных...")
 	config.ConnectDB()
 
-	// Получаем подключение к БД
 	db := config.DB
 
-	// Инициализация сервисов
 	authRepo := auth.NewAuthRepository(db)
 	authService := auth.NewAuthService(authRepo)
 	authHandler := auth.NewAuthHandler(authService)
@@ -32,7 +29,6 @@ func main() {
 	fileService := document.NewFileService(fileRepo)
 	fileHandler := document.NewFileHandler(fileService)
 
-	// Инициализация модулей
 	expRepo := expenses.NewExpenseRepository(db)
 	expService := expenses.NewExpenseService(expRepo)
 	expHandler := expenses.NewExpenseHandler(expService)
@@ -41,10 +37,8 @@ func main() {
 	chatService := feedback.NewChatService(chatRepo)
 	chatHandler := feedback.NewChatHandler(chatService)
 
-	// Создание маршрутизатора
 	r := gin.Default()
 
-	// 🔥 CORS Middleware
 	r.Use(cors.New(cors.Config{
 		AllowAllOrigins:  true,
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
@@ -57,14 +51,12 @@ func main() {
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
-	// 🔑 Роуты авторизации
 	authRoutes := r.Group("/auth")
 	{
 		authRoutes.POST("/register", authHandler.Register)
 		authRoutes.POST("/login", authHandler.Login)
 	}
 
-	// 🔒 Защищённые роуты (JWT)
 	protectedRoutes := r.Group("/api")
 	protectedRoutes.Use(middleware.AuthMiddleware())
 	{
@@ -74,14 +66,11 @@ func main() {
 		protectedRoutes.GET("/files", fileHandler.ListFiles)
 		protectedRoutes.GET("/download/:id", fileHandler.DownloadFile)
 
-		// 🔐 Маршруты коммунальных расходов
 		protectedRoutes.POST("/expenses/calculate", expHandler.CalculateExpense)
 
-		// 🔐 Маршруты чата
 		protectedRoutes.POST("/chat/send", chatHandler.SendMessageHandler)
 		protectedRoutes.GET("/chat/history", chatHandler.GetChatHistoryHandler)
 
-		// 🔐 Админские маршруты
 		adminRoutes := protectedRoutes.Group("/")
 		adminRoutes.Use(middleware.AdminMiddleware())
 		{
@@ -90,7 +79,6 @@ func main() {
 		}
 	}
 
-	// Запуск сервера
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8081"

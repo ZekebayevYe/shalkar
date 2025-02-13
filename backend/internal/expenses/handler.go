@@ -22,7 +22,7 @@ func (h *ExpenseHandler) CalculateExpense(c *gin.Context) {
 		return
 	}
 
-	userID := c.GetInt("user_id") // Теперь получаем user_id как int
+	userID := c.GetInt("user_id") 
 	if userID == 0 {
 		log.Println("❌ Ошибка: user_id не передан или равен 0")
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user_id"})
