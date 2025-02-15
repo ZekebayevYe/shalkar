@@ -1,6 +1,7 @@
 package document
 
 import (
+	"log"
 	"net/http"
 	"strconv"
 
@@ -44,6 +45,8 @@ func (h *FileHandler) UploadFile(c *gin.Context) {
         return
     }
 
+    c.JSON(http.StatusOK, gin.H{"message": "Trying to upload", "file_name": file.Filename})
+
     uploadedFile, err := h.service.UploadFile(file, strconv.Itoa(userID), role)
     if err != nil {
         c.JSON(http.StatusForbidden, gin.H{"error": "Uploading file: " + err.Error()})
@@ -54,18 +57,24 @@ func (h *FileHandler) UploadFile(c *gin.Context) {
 }
 
 func (h *FileHandler) DeleteFile(c *gin.Context) {
+    log.Println("📌 DELETE запрос на:", c.Request.URL.Path)
+
     id, err := strconv.Atoi(c.Param("id"))
     if err != nil {
+        log.Println("❌ Ошибка парсинга ID:", err)
         c.JSON(http.StatusBadRequest, gin.H{"error": "incorrect id"})
         return
     }
 
+    log.Printf("🗑️ Удаление файла с ID: %d", id)
     err = h.service.DeleteFile(uint(id))
     if err != nil {
+        log.Println("❌ Ошибка удаления файла:", err)
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Error deleting file: " + err.Error()})
         return
     }
 
+    log.Println("✅ Файл удалён успешно")
     c.JSON(http.StatusOK, gin.H{"message": "File deleted successfully"})
 }
 

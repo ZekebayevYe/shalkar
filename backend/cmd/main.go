@@ -16,7 +16,7 @@ import (
 )
 
 func main() {
-	log.Println("🔄 Подключение к базе данных...")
+	log.Println("🔄 Connecting to DB")
 	config.ConnectDB()
 
 	db := config.DB
@@ -39,9 +39,10 @@ func main() {
 
 	r := gin.Default()
 
+	// Разрешаем фронту (localhost:3000) делать запросы
 	r.Use(cors.New(cors.Config{
-		AllowAllOrigins:  true,
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
@@ -51,6 +52,7 @@ func main() {
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
+	// 📌 Маршруты API
 	authRoutes := r.Group("/auth")
 	{
 		authRoutes.POST("/register", authHandler.Register)
@@ -71,13 +73,20 @@ func main() {
 		protectedRoutes.POST("/chat/send", chatHandler.SendMessageHandler)
 		protectedRoutes.GET("/chat/history", chatHandler.GetChatHistoryHandler)
 
-		adminRoutes := protectedRoutes.Group("/")
+		adminRoutes := protectedRoutes.Group("")
 		adminRoutes.Use(middleware.AdminMiddleware())
 		{
 			adminRoutes.POST("/upload", fileHandler.UploadFile)
 			adminRoutes.DELETE("/files/:id", fileHandler.DeleteFile)
 		}
 	}
+
+
+	r.Static("/static", "./public")
+
+	r.GET("/", func(c *gin.Context) {
+		c.File("./public/index.html")
+	})
 
 	port := os.Getenv("PORT")
 	if port == "" {

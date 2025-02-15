@@ -3,15 +3,17 @@ package auth
 import (
 	"UMS/utils"
 	"errors"
+	"UMS/internal/models"
 )
 
 type AuthService struct {
-	repo *AuthRepository
+    repo AuthRepositoryInterface // ✅ Просто интерфейс
 }
 
-func NewAuthService(repo *AuthRepository) *AuthService {
-	return &AuthService{repo: repo}
+func NewAuthService(repo AuthRepositoryInterface) *AuthService { // ✅ Без указателя
+    return &AuthService{repo: repo}
 }
+
 
 func (s *AuthService) Register(username, password, role string) error {
 	if username == "" || password == "" {
@@ -31,7 +33,7 @@ func (s *AuthService) Register(username, password, role string) error {
 		return err
 	}
 
-	user := &User{
+	user := &models.User{
 		Username: username,
 		Password: hashedPassword,
 		Role:     role,
@@ -40,7 +42,7 @@ func (s *AuthService) Register(username, password, role string) error {
 	return s.repo.CreateUser(user)
 }
 
-func (s *AuthService) Login(username, password string) (*User, string, error) {
+func (s *AuthService) Login(username, password string) (*models.User, string, error) {
 	user, err := s.repo.FindByUsername(username)
 	if err != nil {
 		return nil, "", err
@@ -58,5 +60,5 @@ func (s *AuthService) Login(username, password string) (*User, string, error) {
 		return nil, "", err
 	}
 
-	return user, token, nil 
+	return user, token, nil
 }
