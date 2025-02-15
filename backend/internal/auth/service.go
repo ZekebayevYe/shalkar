@@ -62,3 +62,4 @@ func (s *AuthService) Login(username, password string) (*models.User, string, er
 
 	return user, token, nil
 }
+

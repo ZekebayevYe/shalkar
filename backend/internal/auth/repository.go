@@ -1,9 +1,9 @@
 package auth
 
 import (
+	"UMS/internal/models"
 	"gorm.io/gorm"
-		"UMS/internal/models"
-	)
+)
 
 //go:generate mockgen -source=repository.go -destination=mocks/mock_auth_repository.go -package=mocks
 
