@@ -23,20 +23,27 @@ document.addEventListener('DOMContentLoaded', function () {
         const username = document.getElementById('login-username').value;
         const password = document.getElementById('login-password').value;
 
-        const response = await fetch('http://localhost:8081/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
-        });
+        try {
+            const response = await fetch('http://localhost:8081/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
 
-        const data = await response.json();
+            const data = await response.json();
 
-        if (response.ok) {
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('role', data.role);
-            window.location.href = 'documents.html';
-        } else {
-            document.getElementById('login-error').textContent = data.error || 'Ошибка входа';
+            if (response.ok) {
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('role', data.role);
+                localStorage.setItem('user_id', data.user_id); // ✅ Сохранение user_id
+
+                console.log("🔹 Успешный вход. user_id:", data.user_id);
+                window.location.href = 'documents.html';
+            } else {
+                document.getElementById('login-error').textContent = data.error || 'Ошибка входа';
+            }
+        } catch (error) {
+            console.error("❌ Ошибка сети при входе:", error);
         }
     });
 
@@ -45,19 +52,23 @@ document.addEventListener('DOMContentLoaded', function () {
         const username = document.getElementById('register-username').value;
         const password = document.getElementById('register-password').value;
 
-        const response = await fetch('http://localhost:8081/auth/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
-        });
+        try {
+            const response = await fetch('http://localhost:8081/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
 
-        const data = await response.json();
+            const data = await response.json();
 
-        if (response.ok) {
-            alert('Регистрация успешна! Теперь войдите.');
-            loginTab.click();
-        } else {
-            document.getElementById('register-error').textContent = data.error || 'Ошибка регистрации';
+            if (response.ok) {
+                alert('✅ Регистрация успешна! Теперь войдите.');
+                loginTab.click();
+            } else {
+                document.getElementById('register-error').textContent = data.error || 'Ошибка регистрации';
+            }
+        } catch (error) {
+            console.error("❌ Ошибка сети при регистрации:", error);
         }
     });
 });

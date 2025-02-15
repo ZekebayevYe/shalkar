@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Оставить обращение</title>
     <link rel="stylesheet" href="../css/issues.css">
-    <script defer src="script.js"></script>
+    <script defer src="../js/issues.js"></script>
 </head>
 <body>
     <!-- Навигационная панель -->
@@ -33,6 +33,25 @@
                 </form>
             </div>
         </div>
+    
+        <div class="issue-list">
+            <h2>📜 Мои обращения</h2>
+            <table class="issue-table" id="issues-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Заголовок</th>
+                        <th>Описание</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Динамические данные -->
+                </tbody>
+            </table>
+        </div>
     </div>
+    
+    
 </body>
 </html>

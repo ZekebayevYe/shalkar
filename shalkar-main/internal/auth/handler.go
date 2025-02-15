@@ -14,15 +14,16 @@ func NewAuthHandler(service *AuthService) *AuthHandler {
 	return &AuthHandler{service: service}
 }
 
-// ✅ РЕГИСТРАЦИЯ (Теперь можно задать роль)
+// Регистрация пользователя
 func (h *AuthHandler) Register(c *gin.Context) {
 	var req struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
 		Role     string `json:"role"`
 	}
+
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid data"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid data"})
 		return
 	}
 
@@ -35,14 +36,15 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User created"})
 }
 
-// ✅ ЛОГИН (Теперь возвращает не только `token`, но и `role`)
+// Авторизация пользователя
 func (h *AuthHandler) Login(c *gin.Context) {
 	var req struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
 	}
+
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid data"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid data"})
 		return
 	}
 
@@ -53,7 +55,8 @@ func (h *AuthHandler) Login(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"token": token,
-		"role":  user.Role, // ✅ Теперь фронт получит роль
+		"token":   token,
+		"user_id": user.ID, // Теперь frontend получает user_id
+		"role":    user.Role,
 	})
 }

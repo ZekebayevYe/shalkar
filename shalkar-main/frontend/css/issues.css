@@ -1,126 +1,79 @@
-/* Общие стили */
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #000000; /* Черный фон */
-    color: #ffffff;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-/* Контейнер формы */
+/* 📌 Общий контейнер */
 .container {
+    max-width: 900px;
+    margin: 40px auto;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    width: 100%;
 }
 
-/* Блок с формой */
-.form-box {
-    background: #1c1c1c; /* Темно-серый фон */
-    padding: 40px;
+/* 🟣 Блоки формы и списка */
+.form-box,
+.issue-list {
+    width: 100%;
+    background: #1e1e1e; /* Тёмно-серый фон */
+    padding: 20px;
     border-radius: 12px;
-    box-shadow: 0px 4px 20px rgba(255, 255, 255, 0.1);
-    width: 100%;
-    max-width: 420px;
-    text-align: center;
-}
-
-/* Заголовок */
-h2 {
-    color: #b399ff; /* Светло-фиолетовый */
-    font-size: 24px;
+    box-shadow: 0px 5px 20px rgba(255, 255, 255, 0.1);
     margin-bottom: 20px;
 }
 
-/* Поля ввода */
-input, textarea {
+/* 📌 Заголовки */
+h2 {
+    color: #b88eff; /* Фиолетовый */
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+/* 📋 Стилизация таблицы */
+.issue-table {
     width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 8px;
-    background: #333333;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #2a2a2a; /* Чуть светлее блока */
+}
+
+/* 🔹 Заголовки таблицы */
+.issue-table thead {
+    background: #6a0dad;
     color: white;
+}
+
+.issue-table th, .issue-table td {
+    padding: 14px;
+    text-align: left;
     font-size: 16px;
-    outline: none;
 }
 
-input::placeholder, textarea::placeholder {
-    color: #aaa;
+/* 🎨 Чередование цветов строк */
+.issue-table tr:nth-child(even) {
+    background: #242424;
 }
 
-/* Блок формы */
-.box {
-    background: #2a2a2a; /* Серый фон формы */
-    padding: 20px;
-    border-radius: 10px;
+.issue-table tr:nth-child(odd) {
+    background: #2f2f2f;
 }
 
-/* Кнопка */
-button {
-    width: 100%;
-    background: linear-gradient(45deg, #7b61ff, #a970ff);
-    color: white;
-    border: none;
-    padding: 12px;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s ease;
-    margin-top: 10px;
+/* 🔥 Hover эффект */
+.issue-table tr:hover {
+    background: rgba(184, 142, 255, 0.2);
+    transition: 0.3s;
 }
 
-button:hover {
-    background: linear-gradient(45deg, #6544ff, #8b5cff);
-}
+/* 📌 Для адаптивности */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
 
-/* Навигационная панель */
-.navbar {
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background: rgba(20, 20, 20, 0.9);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 50px;
-    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
-    z-index: 1000;
-}
+    .form-box, .issue-list {
+        padding: 15px;
+    }
 
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: #b399ff;
-    text-transform: uppercase;
+    .issue-table th, .issue-table td {
+        font-size: 14px;
+        padding: 10px;
+    }
 }
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-}
-
-.nav-links li {
-    display: inline-block;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: #ffffff;
-    font-size: 16px;
-    padding: 8px 12px;
-    transition: 0.3s ease;
-}
-
-.nav-links a:hover {
-    color: #b399ff;
-    text-shadow: 0 0 5px rgba(179, 153, 255, 0.8);
-}
-

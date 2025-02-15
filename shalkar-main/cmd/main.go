@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"os"
 	"time"
 
@@ -44,7 +45,8 @@ func main() {
 	// Создание маршрутизатора
 	r := gin.Default()
 
-	issue.RegisterRoutes(r, db)
+	// ✅ Регистрация маршрутов
+	issue.RegisterRoutes(r, db) // ✅ Этот метод уже содержит "/api/issues"
 	news.NewsRegisterRoutes(r)
 
 	// 🔥 CORS Middleware
@@ -69,7 +71,7 @@ func main() {
 
 	// 🔒 Защищённые роуты (JWT)
 	protectedRoutes := r.Group("/api")
-	protectedRoutes.Use(middleware.AuthMiddleware())
+	protectedRoutes.Use(middleware.AuthMiddleware()) // ✅ Middleware загружен правильно
 	{
 		protectedRoutes.GET("/profile", func(c *gin.Context) {
 			c.JSON(200, gin.H{"message": "Доступ разрешен!"})
@@ -93,7 +95,29 @@ func main() {
 		}
 	}
 
-	// Запуск сервера
+	r.Static("/frontend", "./frontend")
+
+	// ✅ Главная страница (редирект на `index.html`)
+	r.GET("/register", func(c *gin.Context) {
+		c.Redirect(http.StatusMovedPermanently, "/frontend/pages/index.html")
+	})
+
+	r.GET("/api/me", middleware.AdminMiddleware(), func(c *gin.Context) {
+		userID, exists := c.Get("user_id")
+		if !exists {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Не авторизован"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"user_id": userID})
+	})
+
+	// Подключаем middleware
+	r.Use(middleware.AuthMiddleware())
+
+	// Подключаем контроллер Issue
+
+	// 🚀 Запуск сервера
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8081"

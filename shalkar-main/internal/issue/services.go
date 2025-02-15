@@ -27,3 +27,7 @@ func (s *IssueService) GetAllIssues() ([]Issue, error) {
 	}
 	return issues, nil
 }
+
+func NewIssueService() *IssueService {
+	return &IssueService{}
+}

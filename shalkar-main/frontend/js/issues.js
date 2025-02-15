@@ -1,60 +1,86 @@
-document.addEventListener('DOMContentLoaded', async () => {
-    const issueForm = document.getElementById('issue-form');
-    const titleInput = document.getElementById('title');
-    const descriptionInput = document.getElementById('description');
-    
-    // Проверяем, есть ли уже блок уведомлений, если нет - создаем
-    let notification = document.getElementById('notification');
-    if (!notification) {
-        notification = document.createElement('div');
-        notification.id = 'notification';
-        notification.className = 'notification';
-        document.body.appendChild(notification);
+document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('user_id');
+
+    if (!token) {
+        alert('❌ Ошибка: Токен отсутствует. Войдите в систему.');
+        window.location.href = 'index.html'; // Перенаправление на страницу входа
+        return;
     }
 
+    const issueForm = document.getElementById('issue-form');
+    const issuesTableBody = document.querySelector('#issues-table tbody');
+
+    // 🟢 Функция загрузки обращений пользователя
+    async function loadIssues() {
+        try {
+            const response = await fetch('http://localhost:8081/api/issues', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            const issues = await response.json();
+            if (response.ok) {
+                issuesTableBody.innerHTML = ''; // Очищаем таблицу перед обновлением
+                issues
+                    .filter(issue => issue.user_id === Number(userId)) // Фильтруем по user_id
+                    .forEach(issue => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${issue.id}</td>
+                            <td>${issue.title}</td>
+                            <td>${issue.description}</td>
+                            <td>${issue.status}</td>
+                        `;
+                        issuesTableBody.appendChild(row);
+                    });
+            } else {
+                alert('❌ Ошибка загрузки обращений: ' + (issues.error || 'Неизвестная ошибка'));
+            }
+        } catch (error) {
+            console.error('Ошибка загрузки обращений:', error);
+            alert('❌ Ошибка соединения с сервером');
+        }
+    }
+
+    // 🔹 Загружаем обращения при загрузке страницы
+    loadIssues();
+
+    // 🟢 Обработчик отправки формы
     issueForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const title = titleInput.value.trim();
-        const description = descriptionInput.value.trim();
+
+        const title = document.getElementById('title').value.trim();
+        const description = document.getElementById('description').value.trim();
 
         if (!title || !description) {
-            showNotification('⚠️ Заполните все поля!', 'error');
+            alert('❌ Заполните все поля');
             return;
         }
 
         try {
-            console.log('Отправляем запрос:', { title, description, status: 'Открыто' });
-
             const response = await fetch('http://localhost:8081/api/issues', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, description, status: 'Открыто' })
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ title, description, status: 'Открыто', user_id: Number(userId) })
             });
 
-            console.log('Ответ от сервера:', response);
-            
+            const data = await response.json();
             if (response.ok) {
-                showNotification('✅ Проблема успешно отправлена!', 'success');
-                titleInput.value = '';
-                descriptionInput.value = '';
+                alert('✅ Проблема успешно отправлена!');
+                issueForm.reset();
+                loadIssues(); // 🔹 Обновляем таблицу
             } else {
-                const errorMessage = await response.text();
-                showNotification(`❌ Ошибка: ${errorMessage}`, 'error');
-                console.error('Ошибка сервера:', errorMessage);
+                alert('❌ Ошибка: ' + (data.error || 'Неизвестная ошибка'));
             }
         } catch (error) {
             console.error('Ошибка запроса:', error);
-            showNotification('❌ Ошибка сети. Попробуйте снова!', 'error');
+            alert('❌ Ошибка соединения с сервером');
         }
     });
-
-    function showNotification(message, type) {
-        notification.textContent = message;
-        notification.className = `notification ${type}`;
-        notification.style.display = 'block';
-
-        setTimeout(() => {
-            notification.style.display = 'none';
-        }, 3000);
-    }
 });

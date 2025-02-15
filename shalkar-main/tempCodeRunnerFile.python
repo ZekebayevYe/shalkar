@@ -1,0 +1,102 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+def sir_rk4(S0, I0, R0, beta, gamma, h, days):
+    N = S0 + I0 + R0  # Total population
+
+    # Time array
+    t = np.arange(0, days, h)
+
+    # Initialize arrays for S, I, R
+    S = np.zeros(len(t))
+    I = np.zeros(len(t))
+    R = np.zeros(len(t))
+
+    # Set initial conditions
+    S[0], I[0], R[0] = S0, I0, R0
+
+    def dSdt(s, i):
+        return -beta * s * i / N
+
+    def dIdt(s, i):
+        return beta * s * i / N - gamma * i
+
+    def dRdt(i):
+        return gamma * i
+
+    # RK4 method
+    for n in range(len(t) - 1):
+        k1_S = h * dSdt(S[n], I[n])
+        k1_I = h * dIdt(S[n], I[n])
+        k1_R = h * dRdt(I[n])
+
+        k2_S = h * dSdt(S[n] + k1_S / 2, I[n] + k1_I / 2)
+        k2_I = h * dIdt(S[n] + k1_S / 2, I[n] + k1_I / 2)
+        k2_R = h * dRdt(I[n] + k1_I / 2)
+
+        k3_S = h * dSdt(S[n] + k2_S / 2, I[n] + k2_I / 2)
+        k3_I = h * dIdt(S[n] + k2_S / 2, I[n] + k2_I / 2)
+        k3_R = h * dRdt(I[n] + k2_I / 2)
+
+        k4_S = h * dSdt(S[n] + k3_S, I[n] + k3_I)
+        k4_I = h * dIdt(S[n] + k3_S, I[n] + k3_I)
+        k4_R = h * dRdt(I[n] + k3_I)
+
+        S[n + 1] = S[n] + (k1_S + 2 * k2_S + 2 * k3_S + k4_S) / 6
+        I[n + 1] = I[n] + (k1_I + 2 * k2_I + 2 * k3_I + k4_I) / 6
+        R[n + 1] = R[n] + (k1_R + 2 * k2_R + 2 * k3_R + k4_R) / 6
+
+    return t, S, I, R
+
+# Parameters for the first simulation
+S0_1, I0_1, R0_1 = 9900, 1000, 0
+beta_1, gamma_1 = 0.0003, 0.1
+h_1, days_1 = 0.1, 100
+t_1, S_1, I_1, R_1 = sir_rk4(S0_1, I0_1, R0_1, beta_1, gamma_1, h_1, days_1)
+
+# Parameters for the second simulation
+S0_2, I0_2, R0_2 = 9900, 1000, 0
+beta_2, gamma_2 = 0.0005, 0.05
+h_2, days_2 = 0.1, 100
+t_2, S_2, I_2, R_2 = sir_rk4(S0_2, I0_2, R0_2, beta_2, gamma_2, h_2, days_2)
+
+# Peak infection for the first simulation
+peak_I_1 = max(I_1)
+peak_day_1 = t_1[np.argmax(I_1)]
+
+# Peak infection for the second simulation
+peak_I_2 = max(I_2)
+peak_day_2 = t_2[np.argmax(I_2)]
+
+# Total infected for the first simulation
+total_infected_1 = S0_1 - S_1[-1]
+
+# Total infected for the second simulation
+total_infected_2 = S0_2 - S_2[-1]
+
+# Plot results
+plt.figure(figsize=(10, 6))
+
+# First simulation
+plt.plot(t_1, S_1, label='Susceptible (Simulation 1)', color='blue', linestyle='-')
+plt.plot(t_1, I_1, label='Infected (Simulation 1)', color='red', linestyle='-')
+plt.plot(t_1, R_1, label='Recovered (Simulation 1)', color='green', linestyle='-')
+plt.axvline(peak_day_1, linestyle='--', color='gray', label=f'Peak 1: Day {peak_day_1:.1f}, {peak_I_1:.0f} infected')
+
+# Second simulation
+plt.plot(t_2, S_2, label='Susceptible (Simulation 2)', color='blue', linestyle='--')
+plt.plot(t_2, I_2, label='Infected (Simulation 2)', color='red', linestyle='--')
+plt.plot(t_2, R_2, label='Recovered (Simulation 2)', color='green', linestyle='--')
+plt.axvline(peak_day_2, linestyle='--', color='orange', label=f'Peak 2: Day {peak_day_2:.1f}, {peak_I_2:.0f} infected')
+
+plt.xlabel('Days')
+plt.ylabel('Population')
+plt.legend()
+plt.title('SIR Model Simulation Comparison using RK4')
+plt.grid()
+plt.show()
+
+print(f"Simulation 1 - Peak number of infected: {peak_I_1:.0f} on day {peak_day_1:.1f}")
+print(f"Simulation 1 - Total infected during outbreak: {total_infected_1:.0f}")
+print(f"Simulation 2 - Peak number of infected: {peak_I_2:.0f} on day {peak_day_2:.1f}")
+print(f"Simulation 2 - Total infected during outbreak: {total_infected_2:.0f}")
