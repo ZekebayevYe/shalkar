@@ -1,14 +1,170 @@
+/* GENERAL STYLES */
 body {
     font-family: Arial, sans-serif;
-    background: url('../icons/backround.jpg') no-repeat center center/cover; /* Фон-картинка */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    background: #121212;
     margin: 0;
+    padding: 0;
+    text-align: center;
+    color: white;
+    scroll-behavior: smooth;
+}
+
+/* NAVIGATION BAR */
+.navbar {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(20, 20, 20, 0.9);
+    display: flex;
+    align-items: center;
+    padding: 15px 50px;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+    justify-content: flex-start;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+    padding: 0;
+    margin: 0;
+    margin-left: auto;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #b399ff;
+    text-transform: uppercase;
+}
+
+.nav-links li {
+    display: inline-block;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 16px;
+    padding: 10px 15px;
+    transition: 0.3s ease;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+/* Logout button fix */
+#logout {
+    min-width: 90px;
+    text-align: center;
+    display: inline-block;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    padding: 8px 12px;
+}
+
+/* Hover effect */
+.nav-links a:hover {
+    color: #b399ff;
+    text-shadow: 0 0 5px rgba(179, 153, 255, 0.8);
+}
+
+/* MAIN CONTENT */
+.container {
+    padding-top: 80px;
+    max-width: 800px;
+    margin: auto;
+}
+
+section {
+    margin: 50px 0;
+    padding: 20px;
+    background: rgba(30, 30, 30, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(179, 153, 255, 0.2);
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    padding: 10px;
+    font-size: 18px;
+}
+
+/* FOOTER */
+.footer {
+    margin-top: 50px;
+    padding: 10px;
+    background: rgba(20, 20, 20, 0.9);
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
 }
 
 
+/* ОБЩИЕ СТИЛИ */
+body {
+    font-family: Arial, sans-serif; 
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* НАВИГАЦИОННОЕ МЕНЮ */
+.navbar {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(20, 20, 20, 0.9);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #b399ff;
+    text-transform: uppercase;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-links li {
+    display: inline-block;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 16px;
+    padding: 8px 12px;
+    transition: 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #b399ff;
+    text-shadow: 0 0 5px rgba(179, 153, 255, 0.8);
+}
+
+/* ОСНОВНОЙ КОНТЕЙНЕР */
 .container {
     background: white;
     padding: 20px;
@@ -17,20 +173,67 @@ body {
     text-align: center;
     width: 90%;
     max-width: 800px;
+    margin: 120px auto 20px; /* Отступ сверху, чтобы navbar не перекрывал */
+    background: rgba(30, 30, 30, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(179, 153, 255, 0.2);
+    
 }
 
 h1 {
+    color: white;
     margin-bottom: 20px;
 }
 
+/* ФОРМА ЗАГРУЗКИ ФАЙЛОВ */
 #admin-panel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     margin-bottom: 20px;
 }
 
-input[type="file"] {
-    margin-bottom: 10px;
+.file-label {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    display: inline-block;
 }
 
+.file-label:hover {
+    background: #0056b3;
+}
+
+#file-input {
+    display: none;
+}
+
+#upload-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: bold;
+}
+
+#upload-btn:hover {
+    background: #1f8a37;
+}
+
+#upload-btn img {
+    width: 20px;
+    height: 20px;
+}
+
+/* СПИСОК ФАЙЛОВ */
 .file-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -65,6 +268,7 @@ input[type="file"] {
     margin-top: 5px;
 }
 
+/* КНОПКА УДАЛЕНИЯ */
 .delete-btn {
     background: red;
     color: white;
@@ -80,68 +284,19 @@ input[type="file"] {
     background: darkred;
 }
 
+/* СКРЫТЫЕ ЭЛЕМЕНТЫ */
 .hidden {
     display: none;
 }
-/* Общие стили для контейнера */
-.upload-container {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
 
-
-
-.file-label:hover {
-    background: #007bff;
-    color: white;
-}
-
-
-
-#upload-btn:hover {
-    background: #0056b3;
-}
-
-/* Иконка внутри кнопки */
-#upload-btn img {
-    width: 20px;
-}
-
-#admin-panel {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.file-label {
-    background-color: #007bff;
-    color: white;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
+#logout {
+    min-width: 90px; /* Установлен минимальный размер */
+    text-align: center;
     display: inline-block;
-}
-
-#file-input {
-    display: none;
-}
-
-#upload-btn {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
     font-weight: bold;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    padding: 8px 12px;
 }
 
-#upload-btn img {
-    width: 20px;
-    height: 20px;
-}
+

@@ -4,6 +4,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
 
+
+    const backendUrl = window.location.origin.includes("localhost") 
+        ? "http://localhost:8081" 
+        : "https://your-production-backend.com"; 
+
     loginTab.addEventListener('click', () => {
         loginForm.classList.remove('hidden');
         registerForm.classList.add('hidden');
@@ -23,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const username = document.getElementById('login-username').value;
         const password = document.getElementById('login-password').value;
 
-        const response = await fetch('http://localhost:8081/auth/login', {
+        const response = await fetch(`${backendUrl}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
@@ -34,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (response.ok) {
             localStorage.setItem('token', data.token);
             localStorage.setItem('role', data.role);
-            window.location.href = 'documents.html';
+            window.location.href = 'main.html';
         } else {
             document.getElementById('login-error').textContent = data.error || 'Ошибка входа';
         }
@@ -45,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const username = document.getElementById('register-username').value;
         const password = document.getElementById('register-password').value;
 
-        const response = await fetch('http://localhost:8081/auth/register', {
+        const response = await fetch(`${backendUrl}/auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })

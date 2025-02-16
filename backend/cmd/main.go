@@ -73,14 +73,13 @@ func main() {
 		protectedRoutes.POST("/chat/send", chatHandler.SendMessageHandler)
 		protectedRoutes.GET("/chat/history", chatHandler.GetChatHistoryHandler)
 
-		adminRoutes := protectedRoutes.Group("")
+		adminRoutes := protectedRoutes.Group("/admin")
 		adminRoutes.Use(middleware.AdminMiddleware())
 		{
 			adminRoutes.POST("/upload", fileHandler.UploadFile)
 			adminRoutes.DELETE("/files/:id", fileHandler.DeleteFile)
 		}
 	}
-
 
 	r.Static("/static", "./public")
 

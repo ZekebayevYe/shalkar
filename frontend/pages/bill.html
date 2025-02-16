@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill Payment</title>
+    <link rel="stylesheet" href="../css/bill.css">
+    <script defer src="../js/bill.js"></script>
+</head>
+<body>
+    <!-- NAVIGATION BAR -->
+    <nav class="navbar">
+        <div class="logo">UMS</div>
+        <ul class="nav-links">
+            <li><a href="main.html">Home</a></li>
+            <li><a href="documents.html">Documents</a></li>
+            <li><a href="news.html">News & Events</a></li>
+            <li><a href="issues.html">Report</a></li>
+            <li><a href="bill.html">Bill Payment</a></li>
+            <li><a href="chat.html">Support</a></li>
+            <li><a href="#" id="logout">Logout</a></li>
+        </ul>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+        <h1>Utility Bill Payment</h1>
+
+        <section class="bill-form">
+            <h2>Calculate Your Bill</h2>
+            <div class="input-group">
+                <label for="electricity">Electricity (kWh):</label>
+                <input type="number" id="electricity" placeholder="Enter consumption">
+            </div>
+
+            <div class="input-group">
+                <label for="water">Water (m³):</label>
+                <input type="number" id="water" placeholder="Enter consumption">
+            </div>
+
+            <div class="input-group">
+                <label for="gas">Gas (m³):</label>
+                <input type="number" id="gas" placeholder="Enter consumption">
+            </div>
+
+            <button id="calculate">Calculate</button>
+        </section>
+
+        <section id="result" class="hidden">
+            <h2>Total Payment</h2>
+            <p class="total-amount">Total: <span id="total">0 KZT</span></p>
+            <ul>
+                <li>Electricity: <span id="elec-cost">0 KZT</span></li>
+                <li>Water: <span id="water-cost">0 KZT</span></li>
+                <li>Gas: <span id="gas-cost">0 KZT</span></li>
+            </ul>
+            <button id="pay">Pay Now</button>
+            <div id="qrcode" class="hidden"></div>
+        </section>
+
+        <section class="bill-history">
+            <h2>Payment History</h2>
+            <ul id="history"></ul>
+        </section>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>&copy; 2024 UMS | All Rights Reserved</p>
+    </div>
+</body>
+</html>

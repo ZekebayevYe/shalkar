@@ -4,6 +4,8 @@ import (
     "gorm.io/gorm"
 )
 
+//go:generate mockgen -source=repository.go -destination=mocks/mock_repository.go -package=mocks
+
 type FileRepository interface {
     Save(file *File) error
     GetByID(id uint) (*File, error)

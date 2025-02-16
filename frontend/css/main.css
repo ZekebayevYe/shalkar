@@ -1,0 +1,112 @@
+/* GENERAL STYLES */
+body {
+    font-family: Arial, sans-serif;
+    background: #121212;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    color: white;
+    scroll-behavior: smooth;
+}
+
+/* NAVIGATION BAR */
+.navbar {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(20, 20, 20, 0.9);
+    display: flex;
+    align-items: center;
+    padding: 15px 50px;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+    justify-content: flex-start; /* Выровняли по левому краю */
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+    padding: 0;
+    margin: 0;
+    margin-left: auto; /* Отодвинули меню вправо */
+}
+
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #b399ff;
+    text-transform: uppercase;
+}
+
+
+
+.nav-links li {
+    display: inline-block;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 16px;
+    padding: 10px 15px; /* Увеличенный padding */
+    transition: 0.3s ease;
+    display: inline-block;
+    white-space: nowrap; /* Запрещает перенос слов */
+}
+
+/* Logout button fix */
+#logout {
+    min-width: 90px; /* Установлен минимальный размер */
+    text-align: center;
+    display: inline-block;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    padding: 8px 12px;
+}
+
+/* Hover effect */
+.nav-links a:hover {
+    color: #b399ff;
+    text-shadow: 0 0 5px rgba(179, 153, 255, 0.8);
+}
+
+/* MAIN CONTENT */
+.container {
+    padding-top: 80px;
+    max-width: 800px;
+    margin: auto;
+}
+
+section {
+    margin: 50px 0;
+    padding: 20px;
+    background: rgba(30, 30, 30, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(179, 153, 255, 0.2);
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    padding: 10px;
+    font-size: 18px;
+}
+
+/* FOOTER */
+.footer {
+    margin-top: 50px;
+    padding: 10px;
+    background: rgba(20, 20, 20, 0.9);
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}

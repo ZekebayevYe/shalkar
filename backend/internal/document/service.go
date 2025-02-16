@@ -44,12 +44,12 @@ func (s *fileService) UploadFile(fileHeader *multipart.FileHeader, username stri
 
     dst, err := os.Create(filePath)
     if err != nil {
-        return nil, fmt.Errorf("Error creating file: %v", err)
+        return nil, fmt.Errorf(`Error creating file: %v`, err)
     }
     defer dst.Close()
 
     if _, err := io.Copy(dst, src); err != nil {
-        return nil, fmt.Errorf("Error in saving file: %v", err)
+        return nil, fmt.Errorf(`Error in saving file: %v`, err)
     }
 
     file := &File{
@@ -60,7 +60,7 @@ func (s *fileService) UploadFile(fileHeader *multipart.FileHeader, username stri
     }
 
     if err := s.repo.Save(file); err != nil {
-        return nil, fmt.Errorf("Error in saving data in DB: %v", err)
+        return nil, fmt.Errorf(`Error in saving data in DB: %v`, err)
     }
 
     return file, nil

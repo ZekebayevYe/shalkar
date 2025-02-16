@@ -8,8 +8,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     const adminPanel = document.getElementById('admin-panel');
-    if (role === 'admin') {
-        adminPanel?.classList.remove('hidden');
+
+    if (role !== 'admin' && adminPanel) {
+        adminPanel.style.display = 'none';  // Полностью скрываем элемент
     }
 
     function getFileIcon(filename) {
@@ -26,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             txt: 'text.png',
             zip: 'zip.png',
             rar: 'zip.png',
-            pptx: 'pptx.png'
+            pptx: 'pptx.png',
         };
         return `../icons/${icons[ext] || 'file.png'}`;
     }
@@ -58,20 +59,16 @@ document.addEventListener('DOMContentLoaded', async function () {
                 fileList.appendChild(fileCard);
             });
 
-            // ✅ Привязываем события клика к файлам и иконкам
             document.querySelectorAll('.file-icon, .file-name').forEach(element => {
                 element.addEventListener('click', function () {
                     const fileId = this.dataset.id;
                     const fileName = this.dataset.name;
                     if (fileId && fileName) {
                         downloadFile(fileId, fileName);
-                    } else {
-                        console.error('Ошибка: fileId или fileName отсутствуют');
                     }
                 });
             });
 
-            // ✅ Привязываем обработчик удаления (только для админа)
             if (role === 'admin') {
                 document.querySelectorAll('.delete-btn').forEach(btn => {
                     btn.addEventListener('click', async function () {
@@ -110,8 +107,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
 
-            console.log(`✅ Файл ${fileName} успешно скачан`);
-
         } catch (error) {
             console.error('Ошибка при скачивании:', error);
             alert('Не удалось скачать файл');
@@ -120,7 +115,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     async function deleteFile(fileId) {
         try {
-            const response = await fetch(`http://localhost:8081/api/files/${fileId}`, {
+            const response = await fetch(`http://localhost:8081/api/admin/files/${fileId}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -144,7 +139,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         formData.append('file', file);
 
         try {
-            const response = await fetch('http://localhost:8081/api/upload', {
+            const response = await fetch('http://localhost:8081/api/admin/upload', {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` },
                 body: formData
