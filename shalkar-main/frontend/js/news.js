@@ -1,51 +1,49 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const newsCarousel = document.getElementById('news-carousel');
-    const eventCarousel = document.getElementById('event-carousel');
+    const token = localStorage.getItem('token');
 
-    async function fetchData(url) {
+    async function fetchNews() {
         try {
-            const response = await fetch(url);
-            return await response.json();
-        } catch (error) {
-            console.error('Ошибка загрузки данных:', error);
-        }
-    }
+            const response = await fetch('http://localhost:8081/news', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
 
-    function createCard(item, type) {
-        const div = document.createElement('div');
-        div.classList.add(type === 'news' ? 'news-item' : 'event-item');
-        div.innerHTML = `
-            <h3>${item.title}</h3>
-            <p>${item.content}</p>
-            <button class="like-btn" data-id="${item.id}" data-type="${type}">❤️ ${item.likes}</button>
-        `;
-        return div;
-    }
-
-    async function loadNews() {
-        const news = await fetchData('http://localhost:8081/news');
-        news.forEach(item => newsCarousel.appendChild(createCard(item, 'news')));
-    }
-
-    async function loadEvents() {
-        const events = await fetchData('http://localhost:8081/events');
-        events.forEach(item => eventCarousel.appendChild(createCard(item, 'event')));
-    }
-
-    document.addEventListener('click', async (e) => {
-        if (e.target.classList.contains('like-btn')) {
-            const id = e.target.dataset.id;
-            const type = e.target.dataset.type;
-            const url = `http://localhost:8081/${type}/${id}/react`;
-            
-            const response = await fetch(url, { method: 'POST' });
-            if (response.ok) {
-                let likes = parseInt(e.target.textContent.replace('❤️', '').trim(), 10);
-                e.target.textContent = `❤️ ${likes + 1}`;
+            if (!response.ok) {
+                throw new Error(`Ошибка HTTP: ${response.status}`);
             }
-        }
-    });
 
-    loadNews();
-    loadEvents();
+            const newsList = await response.json();
+            console.log("Новости:", newsList);
+            const newsContainer = document.getElementById('news-list');
+            newsContainer.innerHTML = '';
+
+            newsList.forEach(news => {
+                const newsItem = document.createElement('div');
+                newsItem.classList.add('swiper-slide', 'news-item');
+                newsItem.innerHTML = `
+                    <h3>${news.title}</h3>
+                    <p>${news.description}</p>
+                    <img src="${news.image_url}" alt="${news.title}" />
+                `;
+                newsContainer.appendChild(newsItem);
+            });
+
+            // Инициализация Swiper после загрузки данных
+            new Swiper('.news-carousel', {
+                loop: true,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev'
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true
+                }
+            });
+
+        } catch (error) {
+            console.error('Ошибка при загрузке новостей:', error);
+        }
+    }
+
+    fetchNews();
 });

@@ -37,3 +37,23 @@ button {
 button:hover {
     background: #0056b3;
 }
+
+.news-item {
+    display: flex;
+    align-items: center;
+}
+
+.news-image img {
+    width: 100px; /* или нужный размер */
+    height: 100px; /* или нужный размер */
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.news-content h3 {
+    margin: 0;
+}
+
+.news-content p {
+    margin-top: 5px;
+}

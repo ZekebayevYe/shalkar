@@ -77,3 +77,52 @@ h2 {
         padding: 10px;
     }
 }
+
+.navbar {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(20, 20, 20, 0.9);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #b399ff;
+    text-transform: uppercase;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links li {
+    display: inline-block;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 16px;
+    padding: 8px 12px;
+    transition: 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #b399ff;
+    text-shadow: 0 0 5px rgba(179, 153, 255, 0.8);
+}
+
+body{
+    background-color: black;
+
+}
