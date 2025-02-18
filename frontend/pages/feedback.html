@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback</title>
+    <link rel="stylesheet" href="../css/expenses.css">
+    <script defer src="../js/feedback.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">UMS</div>
+        <ul class="nav-links">
+            <li><a href="main.html">Home</a></li>
+            <li><a href="documents.html">Documents</a></li>
+            <li><a href="expenses.html">Expenses</a></li>
+            <li><a href="issues.html">Report</a></li>
+            <li><a href="feedback.html">Feedback</a></li>
+            <li><a href="#" id="logout">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Submit Feedback</h1>
+        
+        <div class="feedback-form">
+            <h2>Leave Your Feedback</h2>
+            <form id="feedback-form">
+                <label for="feedback-category">Category:</label>
+                <select id="feedback-category">
+                    <option value="Website Usability">Website Usability</option>
+                    <option value="Technical Support">Technical Support</option>
+                    <option value="Plumbing Services">Plumbing Services</option>
+                    <option value="Cleaning Services">Cleaning Services</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label for="feedback-rating">Rating (0-5):</label>
+                <input type="number" id="feedback-rating" min="0" max="5">
+
+                <label for="feedback-comment">Comment:</label>
+                <textarea id="feedback-comment" rows="4"></textarea>
+
+                <button type="submit">Submit Feedback</button>
+            </form>
+        </div>
+
+        <div class="history-section">
+            <h2>Your Feedback History</h2>
+            <ul id="feedback-history"></ul>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 UMS | All Rights Reserved</p>
+    </div>
+</body>
+</html>

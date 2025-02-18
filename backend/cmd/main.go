@@ -1,24 +1,27 @@
 package main
 
 import (
+	"log"
+	"net/http"
+	"os"
+	"time"
+
 	"UMS/config"
 	"UMS/internal/auth"
 	"UMS/internal/document"
 	"UMS/internal/expenses"
 	"UMS/internal/feedback"
+	"UMS/internal/issue"
+	"UMS/internal/news"
 	"UMS/middleware"
-	"log"
-	"os"
-	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	log.Println("🔄 Connecting to DB")
+	log.Println("🔄 Подключение к базе данных...")
 	config.ConnectDB()
-
 	db := config.DB
 
 	authRepo := auth.NewAuthRepository(db)
@@ -33,16 +36,18 @@ func main() {
 	expService := expenses.NewExpenseService(expRepo)
 	expHandler := expenses.NewExpenseHandler(expService)
 
-	chatRepo := feedback.NewChatRepository(db)
-	chatService := feedback.NewChatService(chatRepo)
-	chatHandler := feedback.NewChatHandler(chatService)
+	feedRepo := feedback.NewFeedbackRepository(db)
+	feedService := feedback.NewFeedbackService(feedRepo)
+	feedHandler := feedback.NewFeedbackHandler(feedService)
 
 	r := gin.Default()
 
-	// Разрешаем фронту (localhost:3000) делать запросы
+	issue.RegisterRoutes(r, db)
+	news.NewsRegisterRoutes(r)
+
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowAllOrigins:  true,
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
@@ -52,7 +57,6 @@ func main() {
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
-	// 📌 Маршруты API
 	authRoutes := r.Group("/auth")
 	{
 		authRoutes.POST("/register", authHandler.Register)
@@ -68,32 +72,54 @@ func main() {
 		protectedRoutes.GET("/files", fileHandler.ListFiles)
 		protectedRoutes.GET("/download/:id", fileHandler.DownloadFile)
 
-		protectedRoutes.POST("/expenses/calculate", expHandler.CalculateExpense)
+		protectedRoutes.POST("/expenses", expHandler.CalculateExpense)
+		protectedRoutes.GET("/expenses/pay", expHandler.ShowPaymentPage)
+		protectedRoutes.GET("/expenses/history", expHandler.GetExpenseHistory)
+		protectedRoutes.GET("/expenses/:expense_id", expHandler.GetExpenseDetails)
 
-		protectedRoutes.POST("/chat/send", chatHandler.SendMessageHandler)
-		protectedRoutes.GET("/chat/history", chatHandler.GetChatHistoryHandler)
+		protectedRoutes.POST("/feedback", feedHandler.SubmitFeedback)
+		protectedRoutes.GET("/feedback", feedHandler.GetUserFeedback)
 
-		adminRoutes := protectedRoutes.Group("/admin")
+		adminRoutes := protectedRoutes.Group("/")
 		adminRoutes.Use(middleware.AdminMiddleware())
 		{
 			adminRoutes.POST("/upload", fileHandler.UploadFile)
 			adminRoutes.DELETE("/files/:id", fileHandler.DeleteFile)
 		}
+
 	}
 
-	r.Static("/static", "./public")
+	r.Static("/frontend", "./frontend")
 
-	r.GET("/", func(c *gin.Context) {
-		c.File("./public/index.html")
+	r.GET("/register", func(c *gin.Context) {
+		c.Redirect(http.StatusMovedPermanently, "/frontend/pages/index.html")
 	})
+	r.POST("/expenses", func(c *gin.Context) {
+		c.File("./frontend/pages/expenses.html")
+	})
+
+	r.POST("/feedback", func(c *gin.Context) {
+		c.File("./frontend/pages/feedback.html")
+	})
+	r.GET("/api/me", middleware.AdminMiddleware(), func(c *gin.Context) {
+		userID, exists := c.Get("user_id")
+		if !exists {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Не авторизован"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"user_id": userID})
+	})
+
+	r.Use(middleware.AuthMiddleware())
 
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8081"
 	}
 
-	log.Printf("🚀 Сервер запущен на http://localhost:%s", port)
+	log.Printf(" Сервер запущен на http://localhost:%s", port)
 	if err := r.Run(":" + port); err != nil {
-		log.Fatalf("❌ Ошибка запуска сервера: %v", err)
+		log.Fatalf(" Ошибка запуска сервера: %v", err)
 	}
 }

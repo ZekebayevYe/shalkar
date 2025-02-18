@@ -1,0 +1,131 @@
+/* 📌 Общий контейнер */
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+}
+
+/* 🟣 Блоки формы и списка */
+.form-box,
+.issue-list {
+    width: 100%;
+    background: #1e1e1e; /* Тёмно-серый фон */
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 5px 20px rgba(255, 255, 255, 0.1);
+    margin-bottom: 20px;
+}
+
+/* 📌 Заголовки */
+h2 {
+    color: #b88eff; /* Фиолетовый */
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+/* 📋 Стилизация таблицы */
+.issue-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #2a2a2a; /* Чуть светлее блока */
+    margin-top: 50px;
+    color: white;
+}
+
+/* 🔹 Заголовки таблицы */
+.issue-table thead {
+    background: #6a0dad;
+    color: white;
+}
+
+.issue-table th, .issue-table td {
+    padding: 14px;
+    text-align: left;
+    font-size: 16px;
+}
+
+/* 🎨 Чередование цветов строк */
+.issue-table tr:nth-child(even) {
+    background: #242424;
+}
+
+.issue-table tr:nth-child(odd) {
+    background: #2f2f2f;
+}
+
+/* 🔥 Hover эффект */
+.issue-table tr:hover {
+    background: rgba(184, 142, 255, 0.2);
+    transition: 0.3s;
+}
+
+/* 📌 Для адаптивности */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+
+    .form-box, .issue-list {
+        padding: 15px;
+    }
+
+    .issue-table th, .issue-table td {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+.navbar {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(20, 20, 20, 0.9);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #b399ff;
+    text-transform: uppercase;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 10px;
+}
+
+.nav-links li {
+    display: inline-block;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 16px;
+    padding: 5px 12px;
+    transition: 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #b399ff;
+    text-shadow: 0 0 5px rgba(179, 153, 255, 0.8);
+}
+
+body{
+    background-color: black;
+
+}

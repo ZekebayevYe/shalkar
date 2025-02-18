@@ -1,15 +1,21 @@
 package feedback
 
-import (
-	"time"
-)
+import "time"
 
-type ChatMessage struct {
-	ID         uint      `json:"id" gorm:"primaryKey"`
-	SenderID   int       `json:"sender_id" gorm:"index"`
-	ReceiverID int       `json:"receiver_id" gorm:"index"`
-	IsAdmin    bool      `json:"is_admin"`
-	Message    string    `json:"message"`
-	Timestamp  time.Time `json:"timestamp"`
-	ChatRoom   string    `json:"chat_room"`
+type Feedback struct {
+	ID        uint      `json:"id" gorm:"primaryKey"`
+	UserID    uint      `json:"user_id" gorm:"not null;index"`
+	Category  string    `json:"category" gorm:"not null"`
+	Rating    int       `json:"rating" gorm:"not null;check:rating >= 0 AND rating <= 5"`
+	Comment   string    `json:"comment" gorm:"size:500"`
+	CreatedAt time.Time `json:"created_at" gorm:"autoCreateTime"`
+}
+
+var AvailableCategories = []string{
+	"Website Functionality",
+	"Janitorial Services",
+	"Plumbing",
+	"Customer Support",
+	"Electricity Issues",
+	"Building Maintenance",
 }

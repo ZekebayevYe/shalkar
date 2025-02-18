@@ -1,36 +1,28 @@
 package feedback
 
 import (
-	"log"
-
 	"gorm.io/gorm"
 )
 
-type ChatRepository interface {
-	SendMessage(chat *ChatMessage) error
-	GetChatHistory(chatRoom string) ([]ChatMessage, error)
+type FeedbackRepository interface {
+	Save(feedback *Feedback) error
+	GetByUserID(userID uint) ([]Feedback, error)
 }
 
-type chatRepository struct {
+type feedbackRepo struct {
 	db *gorm.DB
 }
 
-func NewChatRepository(db *gorm.DB) ChatRepository {
-	return &chatRepository{db: db}
+func NewFeedbackRepository(db *gorm.DB) FeedbackRepository {
+	return &feedbackRepo{db: db}
 }
 
-func (r *chatRepository) SendMessage(chat *ChatMessage) error {
-	log.Println("📌 Попытка сохранить сообщение:", chat)
-
-	err := r.db.Create(chat).Error
-	if err != nil {
-		log.Println("❌ Ошибка сохранения сообщения в БД:", err)
-	}
-	return err
+func (r *feedbackRepo) Save(feedback *Feedback) error {
+	return r.db.Create(feedback).Error
 }
 
-func (r *chatRepository) GetChatHistory(chatRoom string) ([]ChatMessage, error) {
-	var messages []ChatMessage
-	err := r.db.Where("chat_room = ?", chatRoom).Order("timestamp ASC").Find(&messages).Error
-	return messages, err
+func (r *feedbackRepo) GetByUserID(userID uint) ([]Feedback, error) {
+	var feedback []Feedback
+	err := r.db.Where("user_id = ?", userID).Order("created_at DESC").Find(&feedback).Error
+	return feedback, err
 }

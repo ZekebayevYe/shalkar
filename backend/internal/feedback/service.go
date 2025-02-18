@@ -1,35 +1,34 @@
 package feedback
 
-import (
-	"time"
-)
-
-type ChatService interface {
-	SendMessage(senderID, receiverID int, isAdmin bool, chatRoom, message string) error
-	GetChatHistory(chatRoom string) ([]ChatMessage, error)
+type FeedbackService interface {
+	SubmitFeedback(userID uint, category string, rating int, comment string) (*Feedback, error)
+	GetUserFeedback(userID uint) ([]Feedback, error)
 }
 
-type chatService struct {
-	repo ChatRepository
+type feedbackService struct {
+	repo FeedbackRepository
 }
 
-func NewChatService(repo ChatRepository) ChatService {
-	return &chatService{repo: repo}
+func NewFeedbackService(repo FeedbackRepository) FeedbackService {
+	return &feedbackService{repo: repo}
 }
 
-func (s *chatService) SendMessage(senderID, receiverID int, isAdmin bool, chatRoom, message string) error {
-	chat := ChatMessage{
-		SenderID:   senderID,
-		ReceiverID: receiverID,
-		IsAdmin:    isAdmin,
-		ChatRoom:   chatRoom,
-		Message:    message,
-		Timestamp:  time.Now(),
+func (s *feedbackService) SubmitFeedback(userID uint, category string, rating int, comment string) (*Feedback, error) {
+	feedback := &Feedback{
+		UserID:   userID,
+		Category: category,
+		Rating:   rating,
+		Comment:  comment,
 	}
 
-	return s.repo.SendMessage(&chat)
+	err := s.repo.Save(feedback)
+	if err != nil {
+		return nil, err
+	}
+
+	return feedback, nil
 }
 
-func (s *chatService) GetChatHistory(chatRoom string) ([]ChatMessage, error) {
-	return s.repo.GetChatHistory(chatRoom)
+func (s *feedbackService) GetUserFeedback(userID uint) ([]Feedback, error) {
+	return s.repo.GetByUserID(userID)
 }

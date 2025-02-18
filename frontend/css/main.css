@@ -17,22 +17,12 @@ body {
     left: 0;
     background: rgba(20, 20, 20, 0.9);
     display: flex;
+    justify-content: space-between;
     align-items: center;
     padding: 15px 50px;
     box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
     z-index: 1000;
-    justify-content: flex-start; /* Выровняли по левому краю */
 }
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 25px;
-    padding: 0;
-    margin: 0;
-    margin-left: auto; /* Отодвинули меню вправо */
-}
-
 
 .logo {
     font-size: 24px;
@@ -41,7 +31,13 @@ body {
     text-transform: uppercase;
 }
 
-
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+}
 
 .nav-links li {
     display: inline-block;
@@ -51,24 +47,10 @@ body {
     text-decoration: none;
     color: #ffffff;
     font-size: 16px;
-    padding: 10px 15px; /* Увеличенный padding */
-    transition: 0.3s ease;
-    display: inline-block;
-    white-space: nowrap; /* Запрещает перенос слов */
-}
-
-/* Logout button fix */
-#logout {
-    min-width: 90px; /* Установлен минимальный размер */
-    text-align: center;
-    display: inline-block;
-    font-weight: bold;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 5px;
     padding: 8px 12px;
+    transition: 0.3s ease;
 }
 
-/* Hover effect */
 .nav-links a:hover {
     color: #b399ff;
     text-shadow: 0 0 5px rgba(179, 153, 255, 0.8);
@@ -108,5 +90,4 @@ ul li {
     position: fixed;
     bottom: 0;
     width: 100%;
-    text-align: center;
 }

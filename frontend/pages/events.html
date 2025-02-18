@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events</title>
+    <link rel="stylesheet" href="../css/news.css">
+    
+    <!-- Подключаем Swiper -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+    <script defer src="../js/events.js"></script>
+</head>
+<body>
+    <!-- Навигационная панель -->
+    <nav class="navbar">
+        <div class="logo">UMS</div>
+        <ul class="nav-links">
+            <li><a href="main.html">Home Page</a></li>
+            <li><a href="documents.html">Documents</a></li>
+            <li><a href="news.html">News</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="issues.html">Report</a></li>
+            <li><a href="support.html">Feedback</a></li>
+            <li><a href="expenses.html">Expenses</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h2 class="events-title">📰 Events</h2>
+
+        <!-- Карусель событий -->
+        <div class="swiper event-carousel">
+            <div class="swiper-wrapper" id="events-list">
+                <!-- Новости будут загружаться сюда -->
+            </div>
+
+            <!-- Кнопки переключения -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,14 +1,13 @@
 package expenses
 
 import (
-	"log"
-
 	"gorm.io/gorm"
 )
 
 type ExpenseRepository interface {
 	Save(expense *Expense) error
 	GetByUserID(userID int) ([]Expense, error)
+	GetExpenseByID(expenseID int, userID int) (Expense, error)
 }
 
 type expenseRepo struct {
@@ -20,16 +19,17 @@ func NewExpenseRepository(db *gorm.DB) ExpenseRepository {
 }
 
 func (r *expenseRepo) Save(expense *Expense) error {
-	log.Println("📌 Сохранение расходов:", expense)
-	err := r.db.Create(expense).Error
-	if err != nil {
-	  log.Println("❌ Ошибка сохранения в БД:", err)
-	}
-	return err
-  }
+	return r.db.Create(expense).Error
+}
 
 func (r *expenseRepo) GetByUserID(userID int) ([]Expense, error) {
 	var expenses []Expense
-	err := r.db.Where("user_id = ?", userID).Find(&expenses).Error
+	err := r.db.Where("user_id = ?", userID).Order("created_at DESC").Find(&expenses).Error
 	return expenses, err
+}
+
+func (r *expenseRepo) GetExpenseByID(expenseID int, userID int) (Expense, error) {
+	var expense Expense
+	err := r.db.Where("id = ? AND user_id = ?", expenseID, userID).First(&expense).Error
+	return expense, err
 }

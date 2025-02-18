@@ -1,0 +1,58 @@
+.feedback-form {
+    background: rgba(30, 30, 30, 0.9);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(179, 153, 255, 0.2);
+}
+
+.feedback-form h2 {
+    color: #b399ff;
+    text-align: center;
+}
+
+.feedback-form label {
+    display: block;
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.feedback-form select,
+.feedback-form input,
+.feedback-form textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    margin-top: 5px;
+}
+
+.feedback-form button {
+    background: #b399ff;
+    color: white;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.feedback-form button:hover {
+    background: #9370db;
+}
+
+.history-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.history-section li {
+    background: rgba(30, 30, 30, 0.9);
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border-left: 5px solid #b399ff;
+}
+    
