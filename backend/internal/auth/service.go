@@ -7,10 +7,10 @@ import (
 )
 
 type AuthService struct {
-    repo AuthRepositoryInterface // ✅ Просто интерфейс
+    repo AuthRepositoryInterface 
 }
 
-func NewAuthService(repo AuthRepositoryInterface) *AuthService { // ✅ Без указателя
+func NewAuthService(repo AuthRepositoryInterface) *AuthService { 
     return &AuthService{repo: repo}
 }
 

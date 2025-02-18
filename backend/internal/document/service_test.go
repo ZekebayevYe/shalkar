@@ -17,20 +17,16 @@ func TestFileService_UploadFile(t *testing.T) {
 	mockRepo := mocks.NewMockFileRepository(ctrl)
 	fileService := document.NewFileService(mockRepo)
 
-	// Фиктивный заголовок файла
 	fileHeader := &multipart.FileHeader{
 		Filename: "testfile.txt",
-		Size:     123, // Фиктивный размер файла
+		Size:     123, 
 	}
 
 	t.Run("Successful upload", func(t *testing.T) {
-		// Ожидаем, что метод Save будет вызван с любым аргументом и вернет nil
 		mockRepo.EXPECT().Save(gomock.Any()).Return(nil)
 
-		// Вызов метода UploadFile
 		uploadedFile, err := fileService.UploadFile(fileHeader, "testuser", "admin")
 
-		// Проверка результата
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
 		}
@@ -43,10 +39,8 @@ func TestFileService_UploadFile(t *testing.T) {
 	})
 
 	t.Run("Non-admin role", func(t *testing.T) {
-		// Вызов метода UploadFile с ролью, отличной от "admin"
 		_, err := fileService.UploadFile(fileHeader, "testuser", "user")
 
-		// Проверка ошибки
 		if err == nil {
 			t.Fatalf("Expected error, got nil")
 		}
@@ -57,13 +51,10 @@ func TestFileService_UploadFile(t *testing.T) {
 	})
 
 	t.Run("Error saving to repository", func(t *testing.T) {
-		// Ожидаем, что метод Save вернет ошибку
 		mockRepo.EXPECT().Save(gomock.Any()).Return(errors.New("database error"))
 
-		// Вызов метода UploadFile
 		_, err := fileService.UploadFile(fileHeader, "testuser", "admin")
 
-		// Проверка ошибки
 		if err == nil {
 			t.Fatalf("Expected error, got nil")
 		}

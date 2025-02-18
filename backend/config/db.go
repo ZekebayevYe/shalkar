@@ -13,13 +13,11 @@ import (
 var DB *gorm.DB
 
 func ConnectDB() {
-	// Загружаем .env
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Ошибка загрузки .env файла")
 	}
 
-	// Получаем переменные окружения
 	host := os.Getenv("DB_HOST")
 	user := os.Getenv("DB_USER")
 	password := os.Getenv("DB_PASSWORD")

@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const adminPanel = document.getElementById('admin-panel');
 
     if (role !== 'admin' && adminPanel) {
-        adminPanel.style.display = 'none';  // Полностью скрываем элемент
+        adminPanel.style.display = 'none'; 
     }
 
     function getFileIcon(filename) {
