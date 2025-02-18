@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Management</title>
+    <link rel="stylesheet" href="../css/expenses.css">
+    <script defer src="../js/expenses.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">UMS</div>
+        <ul class="nav-links">
+            <li><a href="main.html">Home Page</a></li>
+            <li><a href="documents.html">Documents</a></li>
+            <li><a href="news.html">News</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="issues.html">Report</a></li>
+            <li><a href="support.html">Feedback</a></li>
+            <li><a href="expenses.html">Expenses</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Utility Expenses</h1>
+
+        <div class="expense-form">
+            <h2>Calculate Expenses</h2>
+            <form id="expense-form"> <!-- Добавляем форму -->
+                <label>Cold Water (m³): <input type="number" id="cold_water"></label>
+                <label>Hot Water (m³): <input type="number" id="hot_water"></label>
+                <label>Heating (units): <input type="number" id="heating"></label>
+                <label>Gas (m³): <input type="number" id="gas"></label>
+                <label>Electricity (kWh): <input type="number" id="electricity"></label>
+                <button type="submit">Calculate</button> <!-- Теперь кнопка внутри формы -->
+            </form>
+        </div>
+        
+        <div class="expense-result hidden">
+            <h2>Expense Details</h2>
+            <p><strong>Total Cost:</strong> <span id="detail-total-cost"></span></p>
+            <p><strong>Cold Water:</strong> <span id="detail-cold-water"></span></p>
+            <p><strong>Hot Water:</strong> <span id="detail-hot-water"></span></p>
+            <p><strong>Heating:</strong> <span id="detail-heating"></span></p>
+            <p><strong>Gas:</strong> <span id="detail-gas"></span></p>
+            <p><strong>Electricity:</strong> <span id="detail-electricity"></span></p>
+        </div>
+
+        <div class="payment-section">
+            <h2>Make Payment</h2>
+            <div class="qr-container">
+                <img id="qr-code" src="https://web-development.kz/images/detailed/8/11.png" alt="QR Code">
+            </div>
+        </div>
+        
+
+        <div class="history-section">
+            <h2>Expense History</h2>
+            <ul id="expense-history"></ul>
+        </div>
+
+        <div class="expense-details hidden">
+            <h2>Expense Details</h2>
+            <p><strong>Total Cost:</strong> <span id="detail-total-cost"></span></p>
+            <p><strong>Cold Water:</strong> <span id="detail-cold-water"></span></p>
+            <p><strong>Hot Water:</strong> <span id="detail-hot-water"></span></p>
+            <p><strong>Heating:</strong> <span id="detail-heating"></span></p>
+            <p><strong>Gas:</strong> <span id="detail-gas"></span></p>
+            <p><strong>Electricity:</strong> <span id="detail-electricity"></span></p>
+            <p><strong>Date Recorded:</strong> <span id="detail-date"></span></p>
+        </div>
+        <div class="expense-details hidden" id="details-12">
+            <h3>Expense Breakdown</h3>
+            <p><strong>Total Cost:</strong> <span id="detail-total-cost-12"></span></p>
+            <p><strong>Cold Water:</strong> <span id="detail-cold-water-12"></span></p>
+            <p><strong>Hot Water:</strong> <span id="detail-hot-water-12"></span></p>
+            <p><strong>Heating:</strong> <span id="detail-heating-12"></span></p>
+            <p><strong>Gas:</strong> <span id="detail-gas-12"></span></p>
+            <p><strong>Electricity:</strong> <span id="detail-electricity-12"></span></p>
+            <p><strong>Date Recorded:</strong> <span id="detail-date-12"></span></p>
+        </div>
+        
+        
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 UMS | All Rights Reserved</p>
+    </div>
+</body>
+</html>

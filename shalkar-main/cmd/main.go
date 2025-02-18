@@ -10,7 +10,6 @@ import (
 	"UMS/internal/auth"
 	"UMS/internal/document"
 	"UMS/internal/expenses"
-	"UMS/internal/feedback"
 	"UMS/internal/issue"
 	"UMS/internal/news"
 	"UMS/middleware"
@@ -37,10 +36,6 @@ func main() {
 	expRepo := expenses.NewExpenseRepository(db)
 	expService := expenses.NewExpenseService(expRepo)
 	expHandler := expenses.NewExpenseHandler(expService)
-
-	chatRepo := feedback.NewChatRepository(db)
-	chatService := feedback.NewChatService(chatRepo)
-	chatHandler := feedback.NewChatHandler(chatService)
 
 	// Создание маршрутизатора
 	r := gin.Default()
@@ -69,9 +64,8 @@ func main() {
 		authRoutes.POST("/login", authHandler.Login)
 	}
 
-	// 🔒 Защищённые роуты (JWT)
 	protectedRoutes := r.Group("/api")
-	protectedRoutes.Use(middleware.AuthMiddleware()) // ✅ Middleware загружен правильно
+	protectedRoutes.Use(middleware.AuthMiddleware())
 	{
 		protectedRoutes.GET("/profile", func(c *gin.Context) {
 			c.JSON(200, gin.H{"message": "Доступ разрешен!"})
@@ -79,20 +73,18 @@ func main() {
 		protectedRoutes.GET("/files", fileHandler.ListFiles)
 		protectedRoutes.GET("/download/:id", fileHandler.DownloadFile)
 
-		// 🔐 Маршруты коммунальных расходов
-		protectedRoutes.POST("/expenses/calculate", expHandler.CalculateExpense)
+		protectedRoutes.POST("/expenses", expHandler.CalculateExpense)
+		protectedRoutes.GET("/expenses/pay", expHandler.ShowPaymentPage)
+		protectedRoutes.GET("/expenses/history", expHandler.GetExpenseHistory)
+		protectedRoutes.GET("/expenses/:expense_id", expHandler.GetExpenseDetails)
 
-		// 🔐 Маршруты чата
-		protectedRoutes.POST("/chat/send", chatHandler.SendMessageHandler)
-		protectedRoutes.GET("/chat/history", chatHandler.GetChatHistoryHandler)
-
-		// 🔐 Админские маршруты
 		adminRoutes := protectedRoutes.Group("/")
 		adminRoutes.Use(middleware.AdminMiddleware())
 		{
 			adminRoutes.POST("/upload", fileHandler.UploadFile)
 			adminRoutes.DELETE("/files/:id", fileHandler.DeleteFile)
 		}
+
 	}
 
 	r.Static("/frontend", "./frontend")

@@ -1,16 +1,17 @@
 package expenses
 
 const (
-	ColdWaterRate      = 100.0  // тг/м**3
-	HotWaterRate       = 250.0  // тг/м**3
-	HeatingRate        = 200.0  // тг/м**2
-	GasRate            = 70.0   // тг/м**3
-	ElectricityRate    = 20.0   // тг/кВт*ч
+	ColdWaterRate   = 100.0
+	HotWaterRate    = 250.0
+	HeatingRate     = 200.0
+	GasRate         = 70.0
+	ElectricityRate = 20.0
 )
 
 type ExpenseService interface {
 	CalculateAndSave(userID int, input Expense) (Expense, error)
 	GetUserExpenses(userID int) ([]Expense, error)
+	GetExpenseDetails(expenseID int, userID int) (Expense, error)
 }
 
 type expenseService struct {
@@ -29,10 +30,15 @@ func (s *expenseService) CalculateAndSave(userID int, input Expense) (Expense, e
 		(input.Electricity * ElectricityRate)
 
 	input.UserID = userID
+
 	err := s.repo.Save(&input)
 	return input, err
 }
 
 func (s *expenseService) GetUserExpenses(userID int) ([]Expense, error) {
 	return s.repo.GetByUserID(userID)
+}
+
+func (s *expenseService) GetExpenseDetails(expenseID int, userID int) (Expense, error) {
+	return s.repo.GetExpenseByID(expenseID, userID)
 }

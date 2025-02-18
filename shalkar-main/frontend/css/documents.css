@@ -110,6 +110,7 @@ input[type="file"] {
     list-style: none;
     display: flex;
     gap: 20px;
+    margin-right: 100px;
 }
 
 .nav-links li {

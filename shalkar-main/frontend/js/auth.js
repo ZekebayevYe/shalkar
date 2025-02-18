@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 localStorage.setItem('user_id', data.user_id); // ✅ Сохранение user_id
 
                 console.log("🔹 Успешный вход. user_id:", data.user_id);
-                window.location.href = 'documents.html';
+                window.location.href = 'main.html';
             } else {
                 document.getElementById('login-error').textContent = data.error || 'Ошибка входа';
             }
